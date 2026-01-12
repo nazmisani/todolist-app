@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { registerSchema } from "@/validators/authSchema";
-import bcrypt from "bcryptjs";
+import { hashPassword } from "@/utils/bcrypt";
 
 export async function POST(request: NextRequest) {
   try {
@@ -23,12 +23,12 @@ export async function POST(request: NextRequest) {
 
     if (existingUser) {
       return NextResponse.json(
-        { error: "Email sudah terdaftar" },
+        { error: "Email already registered" },
         { status: 400 }
       );
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await hashPassword(password);
 
     const user = await prisma.user.create({
       data: {
@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(
       {
-        message: "Registrasi berhasil",
+        message: "Registration successful",
         user: {
           id: user.id,
           email: user.email,
@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error(error);
     return NextResponse.json(
-      { error: "Terjadi kesalahan server" },
+      { error: "Internal server error" },
       { status: 500 }
     );
   }

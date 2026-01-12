@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { loginSchema } from "@/validators/authSchema";
 import { generateToken } from "@/utils/jose";
 import bcrypt from "bcryptjs";
+import { comparePassword } from "@/utils/bcrypt";
 
 export async function POST(request: NextRequest) {
   try {
@@ -24,16 +25,16 @@ export async function POST(request: NextRequest) {
 
     if (!user) {
       return NextResponse.json(
-        { error: "Email atau password salah" },
+        { error: "Invalid email or password" },
         { status: 401 }
       );
     }
 
-    const isValidPassword = await bcrypt.compare(password, user.password);
+    const isValidPassword = await comparePassword(password, user.password);
 
     if (!isValidPassword) {
       return NextResponse.json(
-        { error: "Email atau password salah" },
+        { error: "Invalid email or password" },
         { status: 401 }
       );
     }
@@ -45,7 +46,7 @@ export async function POST(request: NextRequest) {
 
     const response = NextResponse.json(
       {
-        message: "Login berhasil",
+        message: "Login successful",
         user: {
           id: user.id,
           email: user.email,
@@ -68,7 +69,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error(error);
     return NextResponse.json(
-      { error: "Terjadi kesalahan server" },
+      { error: "Internal server error" },
       { status: 500 }
     );
   }
