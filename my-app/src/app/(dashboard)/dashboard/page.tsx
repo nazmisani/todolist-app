@@ -34,7 +34,7 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold">Dashboard</h1>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat) => {
           const Icon = stat.icon;
@@ -60,7 +60,8 @@ export default function DashboardPage() {
         </CardHeader>
         <CardContent>
           <p className="text-gray-600">
-            Welcome to your Todo App! Start by creating categories and adding your first todo.
+            Welcome to your Todo App! Start by creating categories and adding
+            your first todo.
           </p>
         </CardContent>
       </Card>
