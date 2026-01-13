@@ -64,12 +64,15 @@ export default function CategoriesPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="p-8 space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">Categories</h1>
-        <Button onClick={() => setIsFormOpen(true)}>
-          <Plus size={18} className="mr-2" />
-          Add Category
+        <div>
+          <h1 className="text-2xl font-bold">Categories</h1>
+          <p className="text-gray-500 mt-1">Organize your todos by category</p>
+        </div>
+        <Button size="sm" onClick={() => setIsFormOpen(true)}>
+          <Plus size={16} className="mr-2" />
+          New Category
         </Button>
       </div>
 

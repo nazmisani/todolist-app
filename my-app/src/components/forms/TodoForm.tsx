@@ -166,14 +166,13 @@ export function TodoForm({
           <div>
             <Label htmlFor="categoryId">Category (Optional)</Label>
             <Select
-              value={categoryValue}
+              value={categoryValue || undefined}
               onValueChange={(value) => setValue("categoryId", value)}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Select category" />
+                <SelectValue placeholder="Select category (optional)" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">None</SelectItem>
                 {categories.map((category: any) => (
                   <SelectItem key={category.id} value={category.id}>
                     {category.name}

@@ -18,10 +18,15 @@ export default function Navbar() {
   };
 
   return (
-    <div className="h-16 bg-white border-b px-6 flex items-center justify-between">
-      <h1 className="text-xl font-semibold">Welcome, {user?.name}</h1>
-      <Button variant="outline" onClick={handleLogout}>
-        <LogOut size={18} className="mr-2" />
+    <div className="h-14 bg-white border-b px-8 flex items-center justify-between">
+      <div>
+        <h1 className="text-lg font-semibold text-gray-800">
+          Welcome back, {user?.name}!
+        </h1>
+        <p className="text-xs text-gray-500">{user?.email}</p>
+      </div>
+      <Button variant="outline" size="sm" onClick={handleLogout}>
+        <LogOut size={16} className="mr-2" />
         Logout
       </Button>
     </div>

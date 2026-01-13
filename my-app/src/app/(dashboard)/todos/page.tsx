@@ -77,12 +77,17 @@ export default function TodosPage() {
 
   return (
     <div className="p-8">
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold">My Todos</h1>
+        <p className="text-gray-500 mt-1">Manage and track your tasks</p>
+      </div>
+
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle>Todos</CardTitle>
-          <Button onClick={() => setIsFormOpen(true)}>
+          <CardTitle className="text-lg">All Tasks</CardTitle>
+          <Button size="sm" onClick={() => setIsFormOpen(true)}>
             <Plus className="mr-2 h-4 w-4" />
-            Add Todo
+            New Todo
           </Button>
         </CardHeader>
         <CardContent>
