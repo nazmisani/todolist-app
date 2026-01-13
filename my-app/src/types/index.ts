@@ -24,10 +24,14 @@ export interface Todo {
   title: string;
   description?: string;
   completed: boolean;
-  priority: "LOW" | "MEDIUM" | "HIGH";
+  priority: "low" | "medium" | "high";
   dueDate?: Date;
   userId: string;
   categoryId?: string;
+  category?: {
+    id: string;
+    name: string;
+  };
   createdAt: Date;
   updatedAt: Date;
 }

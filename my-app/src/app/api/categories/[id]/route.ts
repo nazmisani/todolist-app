@@ -6,7 +6,7 @@ import { categorySchema } from "@/validators/categorySchema";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const token = request.cookies.get("token")?.value;
@@ -15,9 +15,10 @@ export async function GET(
     }
 
     const { userId } = await verifyToken<TokenPayload>(token);
+    const { id } = await params;
 
     const category = await prisma.category.findFirst({
-      where: { id: params.id, userId },
+      where: { id, userId },
     });
 
     if (!category) {
@@ -39,7 +40,7 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const token = request.cookies.get("token")?.value;
@@ -49,6 +50,7 @@ export async function PUT(
 
     const { userId } = await verifyToken<TokenPayload>(token);
     const body = await request.json();
+    const { id } = await params;
 
     const result = categorySchema.safeParse(body);
     if (!result.success) {
@@ -61,7 +63,7 @@ export async function PUT(
     const { name } = result.data;
 
     const category = await prisma.category.updateMany({
-      where: { id: params.id, userId },
+      where: { id, userId },
       data: { name },
     });
 
@@ -87,7 +89,7 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const token = request.cookies.get("token")?.value;
@@ -96,9 +98,10 @@ export async function DELETE(
     }
 
     const { userId } = await verifyToken<TokenPayload>(token);
+    const { id } = await params;
 
     const category = await prisma.category.deleteMany({
-      where: { id: params.id, userId },
+      where: { id, userId },
     });
 
     if (category.count === 0) {
