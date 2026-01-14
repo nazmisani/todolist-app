@@ -1,47 +1,13 @@
-"use client";
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckSquare, FolderOpen, ListTodo, CheckCircle } from "lucide-react";
-import { useTodos } from "@/hooks/useTodos";
-import { useCategories } from "@/hooks/useCategories";
+import DashboardStats from "@/components/dashboard/DashboardStats";
+import { getDashboardData } from "@/app/(dashboard)/dashboard/action";
 
-export default function DashboardPage() {
-  const { data: todosData, isLoading: loadingTodos } = useTodos();
-  const { data: categoriesData, isLoading: loadingCategories } =
-    useCategories();
+export default async function DashboardPage() {
+  const { todos, categories } = await getDashboardData();
 
-  const todos = todosData || [];
-  const categories = categoriesData?.categories || [];
-
-  const completedCount = todos.filter((todo: any) => todo.completed).length;
-  const pendingCount = todos.filter((todo: any) => !todo.completed).length;
-
-  const stats = [
-    {
-      title: "Total Todos",
-      value: loadingTodos ? "..." : todos.length.toString(),
-      icon: ListTodo,
-      color: "text-blue-600",
-    },
-    {
-      title: "Completed",
-      value: loadingTodos ? "..." : completedCount.toString(),
-      icon: CheckCircle,
-      color: "text-green-600",
-    },
-    {
-      title: "Pending",
-      value: loadingTodos ? "..." : pendingCount.toString(),
-      icon: CheckSquare,
-      color: "text-orange-600",
-    },
-    {
-      title: "Categories",
-      value: loadingCategories ? "..." : categories.length.toString(),
-      icon: FolderOpen,
-      color: "text-purple-600",
-    },
-  ];
+  const completedCount = todos.filter((todo) => todo.completed).length;
+  const pendingCount = todos.filter((todo) => !todo.completed).length;
 
   return (
     <div className="p-8 space-y-6">
@@ -50,24 +16,12 @@ export default function DashboardPage() {
         <p className="text-gray-500 mt-1">Welcome back! Here's your overview</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {stats.map((stat) => {
-          const Icon = stat.icon;
-          return (
-            <Card key={stat.title}>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium text-gray-600">
-                  {stat.title}
-                </CardTitle>
-                <Icon className={stat.color} size={20} />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{stat.value}</div>
-              </CardContent>
-            </Card>
-          );
-        })}
-      </div>
+      <DashboardStats
+        totalTodos={todos.length}
+        completedCount={completedCount}
+        pendingCount={pendingCount}
+        categoriesCount={categories.length}
+      />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <Card>
@@ -107,15 +61,13 @@ export default function DashboardPage() {
             <CardTitle className="text-lg">Recent Activity</CardTitle>
           </CardHeader>
           <CardContent>
-            {loadingTodos ? (
-              <p className="text-gray-500">Loading...</p>
-            ) : todos.length === 0 ? (
+            {todos.length === 0 ? (
               <p className="text-gray-500">
                 No todos yet. Start by creating your first todo!
               </p>
             ) : (
               <div className="space-y-3">
-                {todos.slice(0, 3).map((todo: any) => (
+                {todos.slice(0, 3).map((todo) => (
                   <div
                     key={todo.id}
                     className="flex items-start gap-3 pb-3 border-b last:border-0"
