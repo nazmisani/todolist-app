@@ -12,6 +12,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from "@/components/ui/dialog";
 
 const categorySchema = z.object({
@@ -62,8 +63,13 @@ export default function CategoryForm({
           <DialogTitle>
             {initialData ? "Edit Category" : "Create Category"}
           </DialogTitle>
+          <DialogDescription>
+            {initialData
+              ? "Update the category name below."
+              : "Create a new category to organize your todos."}
+          </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
+        <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
           <div className="space-y-2">
             <Label htmlFor="name">Category Name</Label>
             <Input
@@ -76,7 +82,7 @@ export default function CategoryForm({
               <p className="text-sm text-red-500">{errors.name.message}</p>
             )}
           </div>
-          <div className="flex gap-2 justify-end pt-4">
+          <div className="flex gap-2 justify-end">
             <Button
               type="button"
               variant="outline"

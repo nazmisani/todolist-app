@@ -9,6 +9,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -98,6 +99,11 @@ export function TodoForm({
           <DialogTitle>
             {initialData ? "Edit Todo" : "Create New Todo"}
           </DialogTitle>
+          <DialogDescription>
+            {initialData
+              ? "Update your todo details below."
+              : "Fill in the details to create a new todo."}
+          </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
           <div className="space-y-2">
