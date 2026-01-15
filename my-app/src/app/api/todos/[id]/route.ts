@@ -92,7 +92,7 @@ export async function PUT(
         description: validatedData.description,
         priority: validatedData.priority,
         dueDate: validatedData.dueDate ? new Date(validatedData.dueDate) : null,
-        categoryId: validatedData.categoryId,
+        categoryId: validatedData.categoryId || null,
       },
       include: {
         category: {

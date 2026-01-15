@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
         description: validatedData.description,
         priority: validatedData.priority,
         dueDate: validatedData.dueDate ? new Date(validatedData.dueDate) : null,
-        categoryId: validatedData.categoryId,
+        categoryId: validatedData.categoryId || null,
         userId: payload.userId,
       },
       include: {
