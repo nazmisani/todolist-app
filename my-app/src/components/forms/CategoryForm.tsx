@@ -57,7 +57,7 @@ export default function CategoryForm({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent>
+      <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle>
             {initialData ? "Edit Category" : "Create Category"}
@@ -73,10 +73,10 @@ export default function CategoryForm({
               placeholder="Enter category name"
             />
             {errors.name && (
-              <p className="text-sm text-red-600">{errors.name.message}</p>
+              <p className="text-sm text-red-500">{errors.name.message}</p>
             )}
           </div>
-          <div className="flex gap-2 justify-end">
+          <div className="flex gap-2 justify-end pt-4">
             <Button
               type="button"
               variant="outline"

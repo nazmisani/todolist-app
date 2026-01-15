@@ -93,14 +93,14 @@ export function TodoForm({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle>
             {initialData ? "Edit Todo" : "Create New Todo"}
           </DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="title">Title</Label>
             <Input
               id="title"
@@ -108,13 +108,11 @@ export function TodoForm({
               placeholder="Enter todo title"
             />
             {errors.title && (
-              <p className="text-sm text-red-500 mt-1">
-                {errors.title.message}
-              </p>
+              <p className="text-sm text-red-500">{errors.title.message}</p>
             )}
           </div>
 
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="description">Description</Label>
             <Textarea
               id="description"
@@ -123,47 +121,47 @@ export function TodoForm({
               rows={3}
             />
             {errors.description && (
-              <p className="text-sm text-red-500 mt-1">
+              <p className="text-sm text-red-500">
                 {errors.description.message}
               </p>
             )}
           </div>
 
-          <div>
-            <Label htmlFor="priority">Priority</Label>
-            <Select
-              value={priorityValue}
-              onValueChange={(value) =>
-                setValue("priority", value as "low" | "medium" | "high")
-              }
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select priority" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="low">Low</SelectItem>
-                <SelectItem value="medium">Medium</SelectItem>
-                <SelectItem value="high">High</SelectItem>
-              </SelectContent>
-            </Select>
-            {errors.priority && (
-              <p className="text-sm text-red-500 mt-1">
-                {errors.priority.message}
-              </p>
-            )}
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="priority">Priority</Label>
+              <Select
+                value={priorityValue}
+                onValueChange={(value) =>
+                  setValue("priority", value as "low" | "medium" | "high")
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select priority" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="low">Low</SelectItem>
+                  <SelectItem value="medium">Medium</SelectItem>
+                  <SelectItem value="high">High</SelectItem>
+                </SelectContent>
+              </Select>
+              {errors.priority && (
+                <p className="text-sm text-red-500">
+                  {errors.priority.message}
+                </p>
+              )}
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="dueDate">Due Date (Optional)</Label>
+              <Input id="dueDate" type="date" {...register("dueDate")} />
+              {errors.dueDate && (
+                <p className="text-sm text-red-500">{errors.dueDate.message}</p>
+              )}
+            </div>
           </div>
 
-          <div>
-            <Label htmlFor="dueDate">Due Date (Optional)</Label>
-            <Input id="dueDate" type="date" {...register("dueDate")} />
-            {errors.dueDate && (
-              <p className="text-sm text-red-500 mt-1">
-                {errors.dueDate.message}
-              </p>
-            )}
-          </div>
-
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="categoryId">Category (Optional)</Label>
             <Select
               value={categoryValue || undefined}
@@ -181,13 +179,13 @@ export function TodoForm({
               </SelectContent>
             </Select>
             {errors.categoryId && (
-              <p className="text-sm text-red-500 mt-1">
+              <p className="text-sm text-red-500">
                 {errors.categoryId.message}
               </p>
             )}
           </div>
 
-          <div className="flex justify-end gap-2">
+          <div className="flex justify-end gap-2 pt-4">
             <Button
               type="button"
               variant="outline"
