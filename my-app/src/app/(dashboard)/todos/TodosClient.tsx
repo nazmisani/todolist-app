@@ -3,6 +3,12 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Plus } from "lucide-react";
 import { TodoTable } from "@/components/tables/TodoTable";
 import { TodoForm } from "@/components/forms/TodoForm";
@@ -22,6 +28,7 @@ interface TodosClientProps {
 export function TodosClient({ initialTodos }: TodosClientProps) {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingTodo, setEditingTodo] = useState<Todo | null>(null);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
 
   const { data: todos } = useTodos();
   const createTodo = useCreateTodo();
@@ -59,8 +66,13 @@ export function TodosClient({ initialTodos }: TodosClientProps) {
   };
 
   const handleDelete = (id: string) => {
-    if (confirm("Are you sure you want to delete this todo?")) {
-      deleteTodo.mutate(id);
+    setDeleteId(id);
+  };
+
+  const confirmDelete = () => {
+    if (deleteId) {
+      deleteTodo.mutate(deleteId);
+      setDeleteId(null);
     }
   };
 
@@ -104,6 +116,26 @@ export function TodosClient({ initialTodos }: TodosClientProps) {
         onSubmit={editingTodo ? handleUpdate : handleCreate}
         initialData={editingTodo}
       />
+
+      <Dialog open={!!deleteId} onOpenChange={() => setDeleteId(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete Todo</DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-gray-600">
+            Are you sure you want to delete this todo? This action cannot be
+            undone.
+          </p>
+          <div className="flex gap-2 justify-end mt-4">
+            <Button variant="outline" onClick={() => setDeleteId(null)}>
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={confirmDelete}>
+              Delete
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

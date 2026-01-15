@@ -5,6 +5,12 @@ import { Button } from "@/components/ui/button";
 import CategoryTable from "@/components/tables/CategoryTable";
 import CategoryForm from "@/components/forms/CategoryForm";
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
   useCategories,
   useCreateCategory,
   useUpdateCategory,
@@ -28,6 +34,7 @@ interface CategoriesClientProps {
 export function CategoriesClient({ initialCategories }: CategoriesClientProps) {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState<any>(null);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
 
   const { data } = useCategories();
   const createMutation = useCreateCategory();
@@ -64,8 +71,13 @@ export function CategoriesClient({ initialCategories }: CategoriesClientProps) {
   };
 
   const handleDelete = (id: string) => {
-    if (confirm("Are you sure you want to delete this category?")) {
-      deleteMutation.mutate(id);
+    setDeleteId(id);
+  };
+
+  const confirmDelete = () => {
+    if (deleteId) {
+      deleteMutation.mutate(deleteId);
+      setDeleteId(null);
     }
   };
 
@@ -102,6 +114,26 @@ export function CategoriesClient({ initialCategories }: CategoriesClientProps) {
         }
         isLoading={createMutation.isPending || updateMutation.isPending}
       />
+
+      <Dialog open={!!deleteId} onOpenChange={() => setDeleteId(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete Category</DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-gray-600">
+            Are you sure you want to delete this category? This action cannot be
+            undone.
+          </p>
+          <div className="flex gap-2 justify-end mt-4">
+            <Button variant="outline" onClick={() => setDeleteId(null)}>
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={confirmDelete}>
+              Delete
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
