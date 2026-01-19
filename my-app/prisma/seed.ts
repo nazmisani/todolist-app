@@ -184,6 +184,59 @@ const TODOS_DATA: TodoData[] = [
     userIndex: 3,
     categoryIndex: 4,
   },
+  // Additional todos to reach 20+
+  {
+    title: "Fix bug in production",
+    description: "Critical bug needs immediate attention",
+    completed: false,
+    priority: Priority.high,
+    dueDate: new Date("2026-01-19"),
+    userIndex: 0,
+    categoryIndex: 0,
+  },
+  {
+    title: "Team meeting",
+    description: "Weekly sync with development team",
+    completed: true,
+    priority: Priority.medium,
+    dueDate: new Date("2026-01-17"),
+    userIndex: 0,
+    categoryIndex: 0,
+  },
+  {
+    title: "Pay utility bills",
+    description: "Electricity and water bills due",
+    completed: false,
+    priority: Priority.high,
+    dueDate: new Date("2026-01-21"),
+    userIndex: 1,
+    categoryIndex: 2,
+  },
+  {
+    title: "Clean apartment",
+    description: "Weekly cleaning routine",
+    completed: false,
+    priority: Priority.low,
+    userIndex: 1,
+    categoryIndex: 1,
+  },
+  {
+    title: "Check lab results",
+    description: "Follow up on blood test results",
+    completed: false,
+    priority: Priority.medium,
+    dueDate: new Date("2026-01-23"),
+    userIndex: 2,
+    categoryIndex: 3,
+  },
+  {
+    title: "Watch tutorial videos",
+    description: "Next.js advanced patterns tutorial series",
+    completed: true,
+    priority: Priority.low,
+    userIndex: 3,
+    categoryIndex: 4,
+  },
 ];
 
 const DEFAULT_PASSWORD = "password123";
@@ -221,8 +274,8 @@ async function seedUsers() {
             name: userData.name,
             password: hashedPassword,
           },
-        })
-      )
+        }),
+      ),
     );
 
     console.log(`  ✓ Created ${users.length} users`);
@@ -244,8 +297,8 @@ async function seedCategories(users: { id: string }[]) {
             name: categoryData.name,
             userId: users[categoryData.userIndex].id,
           },
-        })
-      )
+        }),
+      ),
     );
 
     console.log(`  ✓ Created ${categories.length} categories`);
@@ -258,7 +311,7 @@ async function seedCategories(users: { id: string }[]) {
 
 async function seedTodos(
   users: { id: string }[],
-  categories: { id: string }[]
+  categories: { id: string }[],
 ) {
   console.log("\n📝 Creating todos...");
 
@@ -278,8 +331,8 @@ async function seedTodos(
                 ? categories[todoData.categoryIndex].id
                 : null,
           },
-        })
-      )
+        }),
+      ),
     );
 
     console.log(`  ✓ Created ${todos.length} todos`);
