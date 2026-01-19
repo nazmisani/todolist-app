@@ -3,10 +3,14 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import { Pool } from "pg";
 import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
+import { readFileSync } from "fs";
+import { join } from "path";
 
 dotenv.config();
 
-// Database setup
+// ============================================
+// Database Configuration
+// ============================================
 const connectionString = process.env.DATABASE_URL!;
 const pool = new Pool({
   connectionString,
@@ -15,372 +19,206 @@ const pool = new Pool({
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
-// Types
-type UserData = {
+// ============================================
+// Type Definitions
+// ============================================
+type UserSeedData = {
   email: string;
   name: string;
+  password: string;
 };
 
-type CategoryData = {
+type CategorySeedData = {
   name: string;
-  userIndex: number;
+  userEmail: string;
 };
 
-type TodoData = {
+type TodoSeedData = {
   title: string;
   description?: string;
   completed: boolean;
   priority: Priority;
-  dueDate?: Date;
-  userIndex: number;
-  categoryIndex?: number;
+  dueDate?: string;
+  userEmail: string;
+  categoryName?: string;
 };
 
-// Seed Data Constants
-const USERS_DATA: UserData[] = [
-  { email: "john@example.com", name: "John Doe" },
-  { email: "jane@example.com", name: "Jane Smith" },
-  { email: "bob@example.com", name: "Bob Wilson" },
-  { email: "alice@example.com", name: "Alice Johnson" },
-];
-
-const CATEGORIES_DATA: CategoryData[] = [
-  { name: "Work", userIndex: 0 },
-  { name: "Personal", userIndex: 0 },
-  { name: "Shopping", userIndex: 1 },
-  { name: "Health", userIndex: 2 },
-  { name: "Learning", userIndex: 3 },
-];
-
-const TODOS_DATA: TodoData[] = [
-  // John's todos (User 0)
-  {
-    title: "Complete project proposal",
-    description: "Write and submit the Q1 project proposal",
-    completed: false,
-    priority: Priority.high,
-    dueDate: new Date("2026-01-20"),
-    userIndex: 0,
-    categoryIndex: 0,
-  },
-  {
-    title: "Review pull requests",
-    description: "Check and review team's pull requests",
-    completed: true,
-    priority: Priority.medium,
-    dueDate: new Date("2026-01-15"),
-    userIndex: 0,
-    categoryIndex: 0,
-  },
-  {
-    title: "Buy groceries",
-    description: "Get milk, eggs, bread, and vegetables",
-    completed: false,
-    priority: Priority.medium,
-    userIndex: 0,
-    categoryIndex: 1,
-  },
-  {
-    title: "Call dentist",
-    description: "Schedule annual checkup appointment",
-    completed: false,
-    priority: Priority.low,
-    dueDate: new Date("2026-01-18"),
-    userIndex: 0,
-    categoryIndex: 1,
-  },
-  // Jane's todos (User 1)
-  {
-    title: "Buy new laptop",
-    description: "Research and purchase new work laptop",
-    completed: false,
-    priority: Priority.high,
-    dueDate: new Date("2026-01-25"),
-    userIndex: 1,
-    categoryIndex: 2,
-  },
-  {
-    title: "Order office supplies",
-    description: "Pens, notebooks, and sticky notes",
-    completed: true,
-    priority: Priority.low,
-    userIndex: 1,
-    categoryIndex: 2,
-  },
-  {
-    title: "Prepare presentation",
-    description: "Create slides for client meeting",
-    completed: false,
-    priority: Priority.high,
-    dueDate: new Date("2026-01-16"),
-    userIndex: 1,
-  },
-  {
-    title: "Update documentation",
-    description: "Update API documentation with new endpoints",
-    completed: false,
-    priority: Priority.medium,
-    userIndex: 1,
-  },
-  // Bob's todos (User 2)
-  {
-    title: "Morning workout",
-    description: "30 minutes cardio and stretching",
-    completed: true,
-    priority: Priority.medium,
-    userIndex: 2,
-    categoryIndex: 3,
-  },
-  {
-    title: "Doctor appointment",
-    description: "Annual physical examination",
-    completed: false,
-    priority: Priority.high,
-    dueDate: new Date("2026-01-22"),
-    userIndex: 2,
-    categoryIndex: 3,
-  },
-  {
-    title: "Meal prep for week",
-    description: "Prepare healthy meals for the upcoming week",
-    completed: false,
-    priority: Priority.medium,
-    dueDate: new Date("2026-01-14"),
-    userIndex: 2,
-    categoryIndex: 3,
-  },
-  // Alice's todos (User 3)
-  {
-    title: "Complete React course",
-    description: "Finish remaining 5 modules on Udemy",
-    completed: false,
-    priority: Priority.medium,
-    dueDate: new Date("2026-01-30"),
-    userIndex: 3,
-    categoryIndex: 4,
-  },
-  {
-    title: "Read TypeScript book",
-    description: "Read chapters 5-8 of TypeScript handbook",
-    completed: true,
-    priority: Priority.low,
-    userIndex: 3,
-    categoryIndex: 4,
-  },
-  {
-    title: "Practice coding challenges",
-    description: "Solve 3 LeetCode problems daily",
-    completed: false,
-    priority: Priority.high,
-    userIndex: 3,
-    categoryIndex: 4,
-  },
-  {
-    title: "Build side project",
-    description: "Start working on portfolio website redesign",
-    completed: false,
-    priority: Priority.medium,
-    dueDate: new Date("2026-02-01"),
-    userIndex: 3,
-    categoryIndex: 4,
-  },
-  // Additional todos to reach 20+
-  {
-    title: "Fix bug in production",
-    description: "Critical bug needs immediate attention",
-    completed: false,
-    priority: Priority.high,
-    dueDate: new Date("2026-01-19"),
-    userIndex: 0,
-    categoryIndex: 0,
-  },
-  {
-    title: "Team meeting",
-    description: "Weekly sync with development team",
-    completed: true,
-    priority: Priority.medium,
-    dueDate: new Date("2026-01-17"),
-    userIndex: 0,
-    categoryIndex: 0,
-  },
-  {
-    title: "Pay utility bills",
-    description: "Electricity and water bills due",
-    completed: false,
-    priority: Priority.high,
-    dueDate: new Date("2026-01-21"),
-    userIndex: 1,
-    categoryIndex: 2,
-  },
-  {
-    title: "Clean apartment",
-    description: "Weekly cleaning routine",
-    completed: false,
-    priority: Priority.low,
-    userIndex: 1,
-    categoryIndex: 1,
-  },
-  {
-    title: "Check lab results",
-    description: "Follow up on blood test results",
-    completed: false,
-    priority: Priority.medium,
-    dueDate: new Date("2026-01-23"),
-    userIndex: 2,
-    categoryIndex: 3,
-  },
-  {
-    title: "Watch tutorial videos",
-    description: "Next.js advanced patterns tutorial series",
-    completed: true,
-    priority: Priority.low,
-    userIndex: 3,
-    categoryIndex: 4,
-  },
-];
-
-const DEFAULT_PASSWORD = "password123";
-
-// Helper Functions
-async function cleanDatabase() {
-  console.log("🧹 Cleaning existing data...");
-
-  try {
-    await prisma.todo.deleteMany();
-    console.log("  ✓ Deleted all todos");
-
-    await prisma.category.deleteMany();
-    console.log("  ✓ Deleted all categories");
-
-    await prisma.user.deleteMany();
-    console.log("  ✓ Deleted all users");
-  } catch (error) {
-    console.error("❌ Error cleaning database:", error);
-    throw error;
-  }
+// ============================================
+// Data Loading Functions
+// ============================================
+function loadJsonData<T>(filename: string): T {
+  const filePath = join(__dirname, "data", filename);
+  const fileContent = readFileSync(filePath, "utf-8");
+  return JSON.parse(fileContent);
 }
 
+// ============================================
+// Seeding Functions
+// ============================================
 async function seedUsers() {
-  console.log("\n👥 Creating users...");
+  console.log("🌱 Seeding users...");
+  const usersData = loadJsonData<UserSeedData[]>("users.json");
 
-  try {
-    const hashedPassword = await bcrypt.hash(DEFAULT_PASSWORD, 10);
+  const users = await Promise.all(
+    usersData.map(async (userData) => {
+      const hashedPassword = await bcrypt.hash(userData.password, 10);
+      return prisma.user.create({
+        data: {
+          email: userData.email,
+          name: userData.name,
+          password: hashedPassword,
+        },
+      });
+    }),
+  );
 
-    const users = await Promise.all(
-      USERS_DATA.map((userData) =>
-        prisma.user.create({
-          data: {
-            email: userData.email,
-            name: userData.name,
-            password: hashedPassword,
-          },
-        }),
-      ),
-    );
-
-    console.log(`  ✓ Created ${users.length} users`);
-    return users;
-  } catch (error) {
-    console.error("❌ Error creating users:", error);
-    throw error;
-  }
+  console.log(`✅ Created ${users.length} users`);
+  return users;
 }
 
-async function seedCategories(users: { id: string }[]) {
-  console.log("\n📁 Creating categories...");
+async function seedCategories() {
+  console.log("🌱 Seeding categories...");
+  const categoriesData = loadJsonData<CategorySeedData[]>("categories.json");
 
-  try {
-    const categories = await Promise.all(
-      CATEGORIES_DATA.map((categoryData) =>
-        prisma.category.create({
-          data: {
-            name: categoryData.name,
-            userId: users[categoryData.userIndex].id,
-          },
-        }),
-      ),
-    );
+  const categories = await Promise.all(
+    categoriesData.map(async (categoryData) => {
+      const user = await prisma.user.findUnique({
+        where: { email: categoryData.userEmail },
+      });
 
-    console.log(`  ✓ Created ${categories.length} categories`);
-    return categories;
-  } catch (error) {
-    console.error("❌ Error creating categories:", error);
-    throw error;
-  }
+      if (!user) {
+        throw new Error(`User not found: ${categoryData.userEmail}`);
+      }
+
+      return prisma.category.create({
+        data: {
+          name: categoryData.name,
+          userId: user.id,
+        },
+      });
+    }),
+  );
+
+  console.log(`✅ Created ${categories.length} categories`);
+  return categories;
 }
 
-async function seedTodos(
-  users: { id: string }[],
-  categories: { id: string }[],
-) {
-  console.log("\n📝 Creating todos...");
+async function seedTodos() {
+  console.log("🌱 Seeding todos...");
+  const todosData = loadJsonData<TodoSeedData[]>("todos.json");
 
-  try {
-    const todos = await Promise.all(
-      TODOS_DATA.map((todoData) =>
-        prisma.todo.create({
-          data: {
-            title: todoData.title,
-            description: todoData.description,
-            completed: todoData.completed,
-            priority: todoData.priority,
-            dueDate: todoData.dueDate,
-            userId: users[todoData.userIndex].id,
-            categoryId:
-              todoData.categoryIndex !== undefined
-                ? categories[todoData.categoryIndex].id
-                : null,
+  const todos = await Promise.all(
+    todosData.map(async (todoData) => {
+      const user = await prisma.user.findUnique({
+        where: { email: todoData.userEmail },
+      });
+
+      if (!user) {
+        throw new Error(`User not found: ${todoData.userEmail}`);
+      }
+
+      let categoryId: string | undefined;
+      if (todoData.categoryName) {
+        const category = await prisma.category.findFirst({
+          where: {
+            name: todoData.categoryName,
+            userId: user.id,
           },
-        }),
-      ),
-    );
+        });
 
-    console.log(`  ✓ Created ${todos.length} todos`);
-    return todos;
-  } catch (error) {
-    console.error("❌ Error creating todos:", error);
-    throw error;
-  }
+        if (category) {
+          categoryId = category.id;
+        }
+      }
+
+      return prisma.todo.create({
+        data: {
+          title: todoData.title,
+          description: todoData.description,
+          completed: todoData.completed,
+          priority: todoData.priority,
+          dueDate: todoData.dueDate ? new Date(todoData.dueDate) : undefined,
+          userId: user.id,
+          categoryId,
+        },
+      });
+    }),
+  );
+
+  console.log(`✅ Created ${todos.length} todos`);
+  return todos;
 }
 
+// ============================================
+// Statistics Function
+// ============================================
+async function printStatistics() {
+  console.log("\n📊 Database Statistics:");
+  console.log("========================");
+
+  const users = await prisma.user.findMany({
+    include: {
+      _count: {
+        select: {
+          todos: true,
+          categories: true,
+        },
+      },
+    },
+  });
+
+  users.forEach((user) => {
+    console.log(`\n👤 ${user.name} (${user.email})`);
+    console.log(`   📝 Todos: ${user._count.todos}`);
+    console.log(`   📁 Categories: ${user._count.categories}`);
+  });
+
+  const totalTodos = await prisma.todo.count();
+  const completedTodos = await prisma.todo.count({
+    where: { completed: true },
+  });
+  const pendingTodos = totalTodos - completedTodos;
+
+  console.log("\n📈 Overall Statistics:");
+  console.log(`   Total Todos: ${totalTodos}`);
+  console.log(`   Completed: ${completedTodos}`);
+  console.log(`   Pending: ${pendingTodos}`);
+  console.log(
+    `   Completion Rate: ${((completedTodos / totalTodos) * 100).toFixed(1)}%`,
+  );
+
+  console.log("\n🔐 Test Credentials:");
+  console.log("   Email: john@example.com | Password: password123");
+  console.log("   Email: jane@example.com | Password: password123");
+  console.log("   Email: alice@example.com | Password: password123");
+}
+
+// ============================================
+// Main Seeding Function
+// ============================================
 async function main() {
-  console.log("🌱 Starting database seed...\n");
-  const startTime = Date.now();
+  console.log("🚀 Starting database seeding...\n");
 
   try {
-    // Clean existing data
-    await cleanDatabase();
+    await seedUsers();
+    await seedCategories();
+    await seedTodos();
 
-    // Seed users
-    const users = await seedUsers();
+    await printStatistics();
 
-    // Seed categories
-    const categories = await seedCategories(users);
-
-    // Seed todos
-    const todos = await seedTodos(users, categories);
-
-    // Summary
-    const duration = ((Date.now() - startTime) / 1000).toFixed(2);
-    console.log("\n✅ Seed completed successfully!");
-    console.log(`⏱️  Duration: ${duration}s`);
-    console.log("\n📊 Summary:");
-    console.log(`  • ${users.length} users`);
-    console.log(`  • ${categories.length} categories`);
-    console.log(`  • ${todos.length} todos`);
-    console.log("\n🔐 Test credentials:");
-    USERS_DATA.forEach((user) => {
-      console.log(`  • ${user.email} / ${DEFAULT_PASSWORD}`);
-    });
+    console.log("\n✨ Seeding completed successfully!");
   } catch (error) {
-    console.error("\n❌ Seed failed:", error);
+    console.error("\n❌ Error during seeding:", error);
     throw error;
   }
 }
 
+// ============================================
+// Execution
+// ============================================
 main()
   .catch((e) => {
-    console.error("Error during seed:", e);
+    console.error(e);
     process.exit(1);
   })
   .finally(async () => {

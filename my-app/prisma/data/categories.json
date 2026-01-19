@@ -1,0 +1,38 @@
+[
+  {
+    "name": "Work",
+    "userEmail": "john@example.com"
+  },
+  {
+    "name": "Personal",
+    "userEmail": "john@example.com"
+  },
+  {
+    "name": "Health",
+    "userEmail": "john@example.com"
+  },
+  {
+    "name": "Work",
+    "userEmail": "jane@example.com"
+  },
+  {
+    "name": "Shopping",
+    "userEmail": "jane@example.com"
+  },
+  {
+    "name": "Learning",
+    "userEmail": "jane@example.com"
+  },
+  {
+    "name": "Work",
+    "userEmail": "alice@example.com"
+  },
+  {
+    "name": "Personal",
+    "userEmail": "alice@example.com"
+  },
+  {
+    "name": "Fitness",
+    "userEmail": "alice@example.com"
+  }
+]

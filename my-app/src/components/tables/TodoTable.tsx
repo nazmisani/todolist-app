@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import {
   ColumnDef,
@@ -148,10 +148,15 @@ export function TodoTable({
   onDelete,
   onToggle,
 }: TodoTableProps) {
+  const [mounted, setMounted] = useState(false);
   const [searchTitle, setSearchTitle] = useState("");
   const [filterPriority, setFilterPriority] = useState("all");
   const [filterStatus, setFilterStatus] = useState("all");
   const [filterCategory, setFilterCategory] = useState("all");
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Memoize columns to prevent re-creation
   const columns = useMemo(
@@ -222,42 +227,46 @@ export function TodoTable({
           className="max-w-xs"
         />
 
-        <Select value={filterPriority} onValueChange={setFilterPriority}>
-          <SelectTrigger className="w-37.5">
-            <SelectValue placeholder="Priority" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Priority</SelectItem>
-            <SelectItem value="low">Low</SelectItem>
-            <SelectItem value="medium">Medium</SelectItem>
-            <SelectItem value="high">High</SelectItem>
-          </SelectContent>
-        </Select>
+        {mounted && (
+          <>
+            <Select value={filterPriority} onValueChange={setFilterPriority}>
+              <SelectTrigger className="w-37.5">
+                <SelectValue placeholder="Priority" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Priority</SelectItem>
+                <SelectItem value="low">Low</SelectItem>
+                <SelectItem value="medium">Medium</SelectItem>
+                <SelectItem value="high">High</SelectItem>
+              </SelectContent>
+            </Select>
 
-        <Select value={filterStatus} onValueChange={setFilterStatus}>
-          <SelectTrigger className="w-37.5">
-            <SelectValue placeholder="Status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Status</SelectItem>
-            <SelectItem value="pending">Pending</SelectItem>
-            <SelectItem value="completed">Completed</SelectItem>
-          </SelectContent>
-        </Select>
+            <Select value={filterStatus} onValueChange={setFilterStatus}>
+              <SelectTrigger className="w-37.5">
+                <SelectValue placeholder="Status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Status</SelectItem>
+                <SelectItem value="pending">Pending</SelectItem>
+                <SelectItem value="completed">Completed</SelectItem>
+              </SelectContent>
+            </Select>
 
-        <Select value={filterCategory} onValueChange={setFilterCategory}>
-          <SelectTrigger className="w-37.5">
-            <SelectValue placeholder="Category" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Category</SelectItem>
-            {categories.map((cat) => (
-              <SelectItem key={cat} value={cat as string}>
-                {cat}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+            <Select value={filterCategory} onValueChange={setFilterCategory}>
+              <SelectTrigger className="w-37.5">
+                <SelectValue placeholder="Category" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Category</SelectItem>
+                {categories.map((cat) => (
+                  <SelectItem key={cat} value={cat as string}>
+                    {cat}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </>
+        )}
       </div>
 
       {/* Table */}

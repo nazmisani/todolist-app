@@ -1,0 +1,515 @@
+[
+  {
+    "title": "Complete project proposal",
+    "description": "Write and submit the Q1 project proposal",
+    "completed": false,
+    "priority": "high",
+    "dueDate": "2026-01-25",
+    "userEmail": "john@example.com",
+    "categoryName": "Work"
+  },
+  {
+    "title": "Review pull requests",
+    "description": "Check and review team's pull requests",
+    "completed": false,
+    "priority": "medium",
+    "dueDate": "2026-01-22",
+    "userEmail": "john@example.com",
+    "categoryName": "Work"
+  },
+  {
+    "title": "Update documentation",
+    "description": "Update API documentation for new endpoints",
+    "completed": true,
+    "priority": "medium",
+    "dueDate": "2026-01-20",
+    "userEmail": "john@example.com",
+    "categoryName": "Work"
+  },
+  {
+    "title": "Team meeting preparation",
+    "description": "Prepare slides for weekly team meeting",
+    "completed": false,
+    "priority": "high",
+    "dueDate": "2026-01-21",
+    "userEmail": "john@example.com",
+    "categoryName": "Work"
+  },
+  {
+    "title": "Code review feedback",
+    "description": "Address feedback from senior developer",
+    "completed": false,
+    "priority": "high",
+    "dueDate": "2026-01-23",
+    "userEmail": "john@example.com",
+    "categoryName": "Work"
+  },
+  {
+    "title": "Buy groceries",
+    "description": "Get milk, eggs, bread, and vegetables",
+    "completed": false,
+    "priority": "medium",
+    "userEmail": "john@example.com",
+    "categoryName": "Personal"
+  },
+  {
+    "title": "Call dentist",
+    "description": "Schedule annual checkup appointment",
+    "completed": false,
+    "priority": "low",
+    "dueDate": "2026-01-24",
+    "userEmail": "john@example.com",
+    "categoryName": "Personal"
+  },
+  {
+    "title": "Fix leaking faucet",
+    "description": "Call plumber or fix it yourself",
+    "completed": false,
+    "priority": "medium",
+    "dueDate": "2026-01-22",
+    "userEmail": "john@example.com",
+    "categoryName": "Personal"
+  },
+  {
+    "title": "Pay utility bills",
+    "description": "Pay electricity and water bills",
+    "completed": true,
+    "priority": "high",
+    "dueDate": "2026-01-19",
+    "userEmail": "john@example.com",
+    "categoryName": "Personal"
+  },
+  {
+    "title": "Organize home office",
+    "description": "Clean and organize workspace",
+    "completed": false,
+    "priority": "low",
+    "userEmail": "john@example.com",
+    "categoryName": "Personal"
+  },
+  {
+    "title": "Annual health checkup",
+    "description": "Schedule and complete annual physical exam",
+    "completed": false,
+    "priority": "high",
+    "dueDate": "2026-01-30",
+    "userEmail": "john@example.com",
+    "categoryName": "Health"
+  },
+  {
+    "title": "Gym membership renewal",
+    "description": "Renew gym membership for another year",
+    "completed": false,
+    "priority": "medium",
+    "dueDate": "2026-01-28",
+    "userEmail": "john@example.com",
+    "categoryName": "Health"
+  },
+  {
+    "title": "Morning jog routine",
+    "description": "Start 30-minute morning jog routine",
+    "completed": true,
+    "priority": "medium",
+    "userEmail": "john@example.com",
+    "categoryName": "Health"
+  },
+  {
+    "title": "Buy vitamins",
+    "description": "Purchase multivitamins and omega-3 supplements",
+    "completed": false,
+    "priority": "low",
+    "userEmail": "john@example.com",
+    "categoryName": "Health"
+  },
+  {
+    "title": "Eye exam appointment",
+    "description": "Schedule eye examination with optometrist",
+    "completed": false,
+    "priority": "medium",
+    "dueDate": "2026-02-05",
+    "userEmail": "john@example.com",
+    "categoryName": "Health"
+  },
+  {
+    "title": "Meal prep for the week",
+    "description": "Prepare healthy meals for the upcoming week",
+    "completed": false,
+    "priority": "medium",
+    "userEmail": "john@example.com",
+    "categoryName": "Health"
+  },
+  {
+    "title": "Update fitness tracker",
+    "description": "Sync and update fitness goals on smartwatch",
+    "completed": true,
+    "priority": "low",
+    "userEmail": "john@example.com",
+    "categoryName": "Health"
+  },
+  {
+    "title": "Buy yoga mat",
+    "description": "Purchase new yoga mat for home workouts",
+    "completed": false,
+    "priority": "low",
+    "userEmail": "john@example.com",
+    "categoryName": "Health"
+  },
+  {
+    "title": "Schedule dental cleaning",
+    "description": "Book appointment for teeth cleaning",
+    "completed": false,
+    "priority": "medium",
+    "dueDate": "2026-02-10",
+    "userEmail": "john@example.com",
+    "categoryName": "Health"
+  },
+  {
+    "title": "Read health newsletter",
+    "description": "Catch up on monthly health and wellness newsletter",
+    "completed": false,
+    "priority": "low",
+    "userEmail": "john@example.com",
+    "categoryName": "Health"
+  },
+  {
+    "title": "Client presentation",
+    "description": "Prepare and deliver presentation to new client",
+    "completed": false,
+    "priority": "high",
+    "dueDate": "2026-01-26",
+    "userEmail": "jane@example.com",
+    "categoryName": "Work"
+  },
+  {
+    "title": "Update project timeline",
+    "description": "Review and update project milestones",
+    "completed": false,
+    "priority": "high",
+    "dueDate": "2026-01-23",
+    "userEmail": "jane@example.com",
+    "categoryName": "Work"
+  },
+  {
+    "title": "Respond to emails",
+    "description": "Clear inbox and respond to pending emails",
+    "completed": true,
+    "priority": "medium",
+    "userEmail": "jane@example.com",
+    "categoryName": "Work"
+  },
+  {
+    "title": "Budget planning meeting",
+    "description": "Attend quarterly budget planning session",
+    "completed": false,
+    "priority": "high",
+    "dueDate": "2026-01-27",
+    "userEmail": "jane@example.com",
+    "categoryName": "Work"
+  },
+  {
+    "title": "Training session",
+    "description": "Conduct training for new team members",
+    "completed": false,
+    "priority": "medium",
+    "dueDate": "2026-01-29",
+    "userEmail": "jane@example.com",
+    "categoryName": "Work"
+  },
+  {
+    "title": "Buy new laptop",
+    "description": "Research and purchase new work laptop",
+    "completed": false,
+    "priority": "high",
+    "dueDate": "2026-02-01",
+    "userEmail": "jane@example.com",
+    "categoryName": "Shopping"
+  },
+  {
+    "title": "Order office supplies",
+    "description": "Purchase pens, notebooks, and sticky notes",
+    "completed": false,
+    "priority": "medium",
+    "userEmail": "jane@example.com",
+    "categoryName": "Shopping"
+  },
+  {
+    "title": "Buy birthday gift",
+    "description": "Find gift for mom's birthday",
+    "completed": false,
+    "priority": "high",
+    "dueDate": "2026-01-28",
+    "userEmail": "jane@example.com",
+    "categoryName": "Shopping"
+  },
+  {
+    "title": "Grocery shopping",
+    "description": "Weekly grocery shopping trip",
+    "completed": true,
+    "priority": "medium",
+    "userEmail": "jane@example.com",
+    "categoryName": "Shopping"
+  },
+  {
+    "title": "Buy new headphones",
+    "description": "Replace broken wireless headphones",
+    "completed": false,
+    "priority": "low",
+    "userEmail": "jane@example.com",
+    "categoryName": "Shopping"
+  },
+  {
+    "title": "Complete React course",
+    "description": "Finish advanced React course on Udemy",
+    "completed": false,
+    "priority": "high",
+    "dueDate": "2026-02-15",
+    "userEmail": "jane@example.com",
+    "categoryName": "Learning"
+  },
+  {
+    "title": "Read tech articles",
+    "description": "Read saved articles about new web technologies",
+    "completed": false,
+    "priority": "medium",
+    "userEmail": "jane@example.com",
+    "categoryName": "Learning"
+  },
+  {
+    "title": "Practice coding challenges",
+    "description": "Complete 5 LeetCode problems",
+    "completed": true,
+    "priority": "medium",
+    "userEmail": "jane@example.com",
+    "categoryName": "Learning"
+  },
+  {
+    "title": "Watch conference talks",
+    "description": "Watch recorded talks from React Conference",
+    "completed": false,
+    "priority": "low",
+    "userEmail": "jane@example.com",
+    "categoryName": "Learning"
+  },
+  {
+    "title": "Learn TypeScript",
+    "description": "Study TypeScript advanced patterns",
+    "completed": false,
+    "priority": "high",
+    "dueDate": "2026-02-10",
+    "userEmail": "jane@example.com",
+    "categoryName": "Learning"
+  },
+  {
+    "title": "Update portfolio",
+    "description": "Add recent projects to personal portfolio",
+    "completed": false,
+    "priority": "medium",
+    "userEmail": "jane@example.com",
+    "categoryName": "Learning"
+  },
+  {
+    "title": "Join coding community",
+    "description": "Join local developer meetup group",
+    "completed": false,
+    "priority": "low",
+    "userEmail": "jane@example.com",
+    "categoryName": "Learning"
+  },
+  {
+    "title": "Read programming book",
+    "description": "Continue reading Clean Code book",
+    "completed": false,
+    "priority": "medium",
+    "userEmail": "jane@example.com",
+    "categoryName": "Learning"
+  },
+  {
+    "title": "Take online certification",
+    "description": "Complete AWS certification course",
+    "completed": false,
+    "priority": "high",
+    "dueDate": "2026-03-01",
+    "userEmail": "jane@example.com",
+    "categoryName": "Learning"
+  },
+  {
+    "title": "Practice algorithms",
+    "description": "Study data structures and algorithms",
+    "completed": true,
+    "priority": "medium",
+    "userEmail": "jane@example.com",
+    "categoryName": "Learning"
+  },
+  {
+    "title": "Quarterly report",
+    "description": "Prepare and submit quarterly performance report",
+    "completed": false,
+    "priority": "high",
+    "dueDate": "2026-01-31",
+    "userEmail": "alice@example.com",
+    "categoryName": "Work"
+  },
+  {
+    "title": "Schedule team meeting",
+    "description": "Organize bi-weekly team sync meeting",
+    "completed": false,
+    "priority": "medium",
+    "dueDate": "2026-01-24",
+    "userEmail": "alice@example.com",
+    "categoryName": "Work"
+  },
+  {
+    "title": "Review contract",
+    "description": "Review and sign new vendor contract",
+    "completed": false,
+    "priority": "high",
+    "dueDate": "2026-01-25",
+    "userEmail": "alice@example.com",
+    "categoryName": "Work"
+  },
+  {
+    "title": "Update CRM",
+    "description": "Update customer records in CRM system",
+    "completed": true,
+    "priority": "medium",
+    "userEmail": "alice@example.com",
+    "categoryName": "Work"
+  },
+  {
+    "title": "Prepare presentation",
+    "description": "Create slides for stakeholder meeting",
+    "completed": false,
+    "priority": "high",
+    "dueDate": "2026-01-28",
+    "userEmail": "alice@example.com",
+    "categoryName": "Work"
+  },
+  {
+    "title": "Book vacation",
+    "description": "Book flights and hotel for summer vacation",
+    "completed": false,
+    "priority": "medium",
+    "dueDate": "2026-02-15",
+    "userEmail": "alice@example.com",
+    "categoryName": "Personal"
+  },
+  {
+    "title": "Car maintenance",
+    "description": "Schedule car for oil change and inspection",
+    "completed": false,
+    "priority": "high",
+    "dueDate": "2026-01-26",
+    "userEmail": "alice@example.com",
+    "categoryName": "Personal"
+  },
+  {
+    "title": "Clean garage",
+    "description": "Organize and clean out garage",
+    "completed": false,
+    "priority": "low",
+    "userEmail": "alice@example.com",
+    "categoryName": "Personal"
+  },
+  {
+    "title": "Family dinner",
+    "description": "Plan and host family dinner this weekend",
+    "completed": false,
+    "priority": "medium",
+    "dueDate": "2026-01-25",
+    "userEmail": "alice@example.com",
+    "categoryName": "Personal"
+  },
+  {
+    "title": "Update insurance",
+    "description": "Review and update home insurance policy",
+    "completed": false,
+    "priority": "medium",
+    "dueDate": "2026-02-05",
+    "userEmail": "alice@example.com",
+    "categoryName": "Personal"
+  },
+  {
+    "title": "Morning workout routine",
+    "description": "Complete 45-minute workout before work",
+    "completed": true,
+    "priority": "high",
+    "userEmail": "alice@example.com",
+    "categoryName": "Fitness"
+  },
+  {
+    "title": "Join fitness class",
+    "description": "Sign up for yoga or pilates class",
+    "completed": false,
+    "priority": "medium",
+    "dueDate": "2026-01-30",
+    "userEmail": "alice@example.com",
+    "categoryName": "Fitness"
+  },
+  {
+    "title": "Buy workout clothes",
+    "description": "Purchase new activewear for gym",
+    "completed": false,
+    "priority": "low",
+    "userEmail": "alice@example.com",
+    "categoryName": "Fitness"
+  },
+  {
+    "title": "Track macros",
+    "description": "Log daily food intake and macronutrients",
+    "completed": true,
+    "priority": "medium",
+    "userEmail": "alice@example.com",
+    "categoryName": "Fitness"
+  },
+  {
+    "title": "Run 5K race",
+    "description": "Register for local 5K charity run",
+    "completed": false,
+    "priority": "medium",
+    "dueDate": "2026-02-20",
+    "userEmail": "alice@example.com",
+    "categoryName": "Fitness"
+  },
+  {
+    "title": "Buy protein powder",
+    "description": "Restock protein powder and supplements",
+    "completed": false,
+    "priority": "low",
+    "userEmail": "alice@example.com",
+    "categoryName": "Fitness"
+  },
+  {
+    "title": "Schedule personal training",
+    "description": "Book session with personal trainer",
+    "completed": false,
+    "priority": "medium",
+    "dueDate": "2026-01-27",
+    "userEmail": "alice@example.com",
+    "categoryName": "Fitness"
+  },
+  {
+    "title": "Stretch routine",
+    "description": "Complete 20-minute stretching routine",
+    "completed": true,
+    "priority": "low",
+    "userEmail": "alice@example.com",
+    "categoryName": "Fitness"
+  },
+  {
+    "title": "Update fitness goals",
+    "description": "Review and set new monthly fitness goals",
+    "completed": false,
+    "priority": "medium",
+    "dueDate": "2026-02-01",
+    "userEmail": "alice@example.com",
+    "categoryName": "Fitness"
+  },
+  {
+    "title": "Meal prep healthy snacks",
+    "description": "Prepare healthy snacks for the week",
+    "completed": false,
+    "priority": "medium",
+    "userEmail": "alice@example.com",
+    "categoryName": "Fitness"
+  }
+]

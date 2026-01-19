@@ -22,10 +22,13 @@ A production-ready todo list application that allows users to manage their tasks
 ### Todo Management
 
 - ✅ Create, read, update, and delete todos
+- ✅ Separate pages for create, view detail, and edit operations
 - ✅ Mark todos as complete/incomplete with one click
 - ✅ Set priority levels (Low, Medium, High) with color indicators
 - ✅ Optional due date tracking
 - ✅ Organize todos by categories
+- ✅ **Pagination** - 10 items per page with page navigation
+- ✅ **Advanced Filtering** - Search by title, filter by priority, status, and category
 
 ### Category System
 
@@ -118,7 +121,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## 🧪 Test Credentials
 
-After running the seed script, you can login with any of these accounts:
+After running the seed script, you can login with any of these accounts (21 sample todos included):
 
 | Email             | Password    | Description                          |
 | ----------------- | ----------- | ------------------------------------ |
@@ -142,6 +145,11 @@ my-app/
 │   │   ├── (dashboard)/       # Protected dashboard pages
 │   │   │   ├── dashboard/
 │   │   │   ├── todos/
+│   │   │   │   ├── page.tsx           # Todos list with pagination & filters
+│   │   │   │   ├── create/page.tsx    # Create todo page
+│   │   │   │   └── [id]/
+│   │   │   │       ├── page.tsx       # Todo detail view page
+│   │   │   │       └── edit/page.tsx  # Edit todo page
 │   │   │   └── categories/
 │   │   ├── api/               # API Routes
 │   │   │   ├── auth/          # Authentication endpoints
@@ -183,6 +191,49 @@ my-app/
 - **Security**: JWT in HTTP-only cookies, protected routes via middleware, password hashing
 - **Code Reusability**: Shared form components, table components, and hooks
 
+### State Management Strategy
+
+**Why Redux Toolkit + TanStack Query?**
+
+This project uses a **hybrid state management approach** for optimal performance and maintainability:
+
+#### Redux Toolkit (Client/Global State)
+
+- **Purpose**: Manage authentication state that needs to persist across the entire app
+- **What it stores**: User info (id, email, name), authentication status
+- **Why chosen**:
+  - Simple global state for auth (single source of truth)
+  - Good DevTools for debugging
+  - Familiar pattern for team collaboration
+  - Overkill for this project size, but demonstrates enterprise patterns
+
+#### TanStack Query / React Query (Server State)
+
+- **Purpose**: Manage all server data (todos, categories)
+- **What it handles**: Data fetching, caching, synchronization, mutations
+- **Why chosen**:
+  - **Automatic cache invalidation** - No manual state updates after mutations
+  - **Optimistic updates** - Instant UI feedback
+  - **Background refetching** - Always fresh data
+  - **Loading & error states** - Built-in UX handling
+  - **Less boilerplate** - No need for Redux actions/reducers for CRUD
+
+#### When to use which?
+
+| State Type         | Tool            | Example                   |
+| ------------------ | --------------- | ------------------------- |
+| Authentication     | Redux           | User logged in/out status |
+| Server Data (CRUD) | TanStack Query  | Todos list, categories    |
+| Form State         | React Hook Form | Input values, validation  |
+| UI State (local)   | useState        | Modal open/close, filters |
+
+**Alternatives Considered:**
+
+- **Zustand**: Lighter than Redux, but chose Redux to show enterprise familiarity
+- **Context API**: Too basic, would need manual optimization
+- **Redux for everything**: Too much boilerplate for server state
+- **Only TanStack Query**: Auth state better in Redux for persistence
+
 ## 🚀 Available Scripts
 
 ```bash
@@ -213,11 +264,21 @@ npm run seed         # Seed database with sample data
 
 ### Todo Management Flow
 
-1. Create todo with title, description, priority, due date, category
-2. View todos in table with sortable columns
-3. Toggle completion status with checkbox
-4. Edit todo details in modal form
-5. Delete with confirmation
+1. **Create**: Navigate to `/todos/create` → Fill form → Submit → Redirect to list
+2. **View**: Click todo row or "View" button → Navigate to `/todos/[id]` → See full details
+3. **Edit**: Click "Edit" button → Navigate to `/todos/[id]/edit` → Update form → Submit
+4. **List**: View paginated table (10 per page) with filters and search
+5. **Toggle**: Check/uncheck completion status directly in table
+6. **Delete**: Click delete → Confirmation dialog → Confirm deletion
+
+### Advanced Table Features
+
+- **Pagination**: 10 items per page with Previous/Next navigation
+- **Search**: Filter todos by title (case-insensitive)
+- **Filter by Priority**: Low, Medium, or High
+- **Filter by Status**: Completed or Pending
+- **Filter by Category**: Dynamic list from user's categories
+- **Real-time Updates**: Table automatically refreshes after mutations
 
 ### State Management
 
@@ -251,15 +312,14 @@ npm run seed         # Seed database with sample data
 
 ## 🐛 Known Issues / Future Improvements
 
-- [ ] Add pagination for todos list
-- [ ] Implement search/filter functionality
-- [ ] Add sorting by different columns
+- [ ] Add column sorting to table
 - [ ] Email verification for registration
 - [ ] Password reset functionality
 - [ ] Export todos to CSV
 - [ ] Dark mode support
 - [ ] Mobile responsive improvements
 - [ ] Add unit and integration tests
+- [ ] Docker containerization
 
 ## 📄 License
 
