@@ -46,7 +46,7 @@ const createColumns = (
 ): ColumnDef<Todo>[] => [
   {
     id: "completed",
-    header: "Status",
+    header: "",
     cell: ({ row }) => (
       <Checkbox
         checked={row.original.completed}
@@ -60,20 +60,16 @@ const createColumns = (
     accessorKey: "title",
     header: "Title",
     cell: ({ row }) => (
-      <span
-        className={row.original.completed ? "line-through text-gray-500" : ""}
-      >
-        {row.original.title}
-      </span>
-    ),
-  },
-  {
-    accessorKey: "description",
-    header: "Description",
-    cell: ({ row }) => (
-      <span className="text-sm text-gray-600">
-        {row.original.description || "-"}
-      </span>
+      <div>
+        <div
+          className={row.original.completed ? "line-through text-gray-500" : ""}
+        >
+          {row.original.title}
+        </div>
+        <div className="text-xs text-gray-500 mt-1">
+          {row.original.description || "-"}
+        </div>
+      </div>
     ),
   },
   {
@@ -111,18 +107,24 @@ const createColumns = (
       if (!dueDate) return <span className="text-sm text-gray-500">-</span>;
 
       return (
-        <span className="text-sm">
+        <span className="text-sm whitespace-nowrap">
           {format(new Date(dueDate), "MMM dd, yyyy")}
         </span>
       );
     },
+    meta: {
+      className: "hidden xl:table-cell",
+    },
   },
   {
     id: "actions",
-    header: "Actions",
+    header: "",
     cell: ({ row }) => (
-      <div className="flex gap-2">
-        <Link href={`/todos/${row.original.id}`}>
+      <div className="flex gap-1">
+        <Link
+          href={`/todos/${row.original.id}`}
+          className="hidden xl:inline-block"
+        >
           <Button variant="ghost" size="sm">
             <Eye className="h-4 w-4" />
           </Button>
@@ -219,18 +221,18 @@ export function TodoTable({
   return (
     <div className="space-y-4">
       {/* Filters */}
-      <div className="flex flex-wrap gap-4">
+      <div className="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-4">
         <Input
           placeholder="Search by title..."
           value={searchTitle}
           onChange={(e) => setSearchTitle(e.target.value)}
-          className="max-w-xs"
+          className="w-full sm:max-w-xs"
         />
 
         {mounted && (
           <>
             <Select value={filterPriority} onValueChange={setFilterPriority}>
-              <SelectTrigger className="w-37.5">
+              <SelectTrigger className="w-full sm:w-37.5">
                 <SelectValue placeholder="Priority" />
               </SelectTrigger>
               <SelectContent>
@@ -242,7 +244,7 @@ export function TodoTable({
             </Select>
 
             <Select value={filterStatus} onValueChange={setFilterStatus}>
-              <SelectTrigger className="w-37.5">
+              <SelectTrigger className="w-full sm:w-37.5">
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
               <SelectContent>
@@ -253,7 +255,7 @@ export function TodoTable({
             </Select>
 
             <Select value={filterCategory} onValueChange={setFilterCategory}>
-              <SelectTrigger className="w-37.5">
+              <SelectTrigger className="w-full sm:w-37.5">
                 <SelectValue placeholder="Category" />
               </SelectTrigger>
               <SelectContent>
@@ -276,7 +278,10 @@ export function TodoTable({
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
+                  <TableHead
+                    key={header.id}
+                    className={(header.column.columnDef.meta as any)?.className}
+                  >
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -293,7 +298,10 @@ export function TodoTable({
               table.getRowModel().rows.map((row) => (
                 <TableRow key={row.id}>
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell
+                      key={cell.id}
+                      className={(cell.column.columnDef.meta as any)?.className}
+                    >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),
@@ -317,8 +325,8 @@ export function TodoTable({
       </div>
 
       {/* Pagination */}
-      <div className="flex items-center justify-between px-2">
-        <div className="text-sm text-gray-500">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-2 px-2">
+        <div className="text-xs sm:text-sm text-gray-500">
           Showing{" "}
           {table.getState().pagination.pageIndex *
             table.getState().pagination.pageSize +
@@ -340,7 +348,7 @@ export function TodoTable({
           >
             Previous
           </Button>
-          <div className="text-sm">
+          <div className="text-xs sm:text-sm whitespace-nowrap">
             Page {table.getState().pagination.pageIndex + 1} of{" "}
             {table.getPageCount()}
           </div>

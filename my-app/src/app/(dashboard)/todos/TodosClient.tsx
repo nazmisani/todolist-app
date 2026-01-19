@@ -49,16 +49,22 @@ export function TodosClient({ initialTodos }: TodosClientProps) {
   };
 
   return (
-    <div className="p-8">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold">My Todos</h1>
-        <p className="text-gray-500 mt-1">Manage and track your tasks</p>
+    <div className="space-y-4">
+      <div>
+        <h1 className="text-xl md:text-2xl font-bold">My Todos</h1>
+        <p className="text-sm text-gray-500 mt-1">
+          Manage and track your tasks
+        </p>
       </div>
 
       <Card>
-        <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="text-lg">All Tasks</CardTitle>
-          <Button size="sm" onClick={() => router.push("/todos/create")}>
+        <CardHeader className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+          <CardTitle className="text-base md:text-lg">All Tasks</CardTitle>
+          <Button
+            size="sm"
+            onClick={() => router.push("/todos/create")}
+            className="w-full sm:w-auto"
+          >
             <Plus className="mr-2 h-4 w-4" />
             New Todo
           </Button>

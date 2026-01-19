@@ -65,7 +65,7 @@ export function CategoriesClient({ initialCategories }: CategoriesClientProps) {
             setIsFormOpen(false);
             setEditingCategory(null);
           },
-        }
+        },
       );
     }
   };
@@ -87,13 +87,19 @@ export function CategoriesClient({ initialCategories }: CategoriesClientProps) {
   };
 
   return (
-    <div className="p-8 space-y-6">
-      <div className="flex justify-between items-center">
+    <div className="space-y-4 md:space-y-6">
+      <div className="flex flex-col sm:flex-row gap-3 sm:justify-between sm:items-start">
         <div>
-          <h1 className="text-2xl font-bold">Categories</h1>
-          <p className="text-gray-500 mt-1">Organize your todos by category</p>
+          <h1 className="text-xl md:text-2xl font-bold">Categories</h1>
+          <p className="text-sm text-gray-500 mt-1">
+            Organize your todos by category
+          </p>
         </div>
-        <Button size="sm" onClick={() => setIsFormOpen(true)}>
+        <Button
+          size="sm"
+          onClick={() => setIsFormOpen(true)}
+          className="w-full sm:w-auto"
+        >
           <Plus size={16} className="mr-2" />
           New Category
         </Button>

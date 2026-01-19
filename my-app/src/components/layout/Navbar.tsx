@@ -22,24 +22,31 @@ export default function Navbar({ onToggleSidebar }: NavbarProps) {
   };
 
   return (
-    <div className="h-14 bg-white border-b px-8 flex items-center justify-between">
-      <div className="flex items-center gap-4">
+    <div className="h-14 bg-white border-b px-4 md:px-8 flex items-center justify-between">
+      <div className="flex items-center gap-2 md:gap-4 min-w-0 flex-1">
         <button
           onClick={onToggleSidebar}
-          className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+          className="p-2 hover:bg-gray-100 rounded-lg transition-colors flex-shrink-0"
         >
           <Menu size={20} className="text-gray-600" />
         </button>
-        <div>
-          <h1 className="text-lg font-semibold text-gray-800">
-            Welcome back, {user?.name}!
+        <div className="min-w-0 flex-1">
+          <h1 className="text-sm md:text-lg font-semibold text-gray-800 truncate">
+            Welcome back{user?.name ? `, ${user.name}` : ""}!
           </h1>
-          <p className="text-xs text-gray-500">{user?.email}</p>
+          <p className="text-xs text-gray-500 truncate hidden sm:block">
+            {user?.email}
+          </p>
         </div>
       </div>
-      <Button variant="outline" size="sm" onClick={handleLogout}>
-        <LogOut size={16} className="mr-2" />
-        Logout
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={handleLogout}
+        className="flex-shrink-0"
+      >
+        <LogOut size={16} className="md:mr-2" />
+        <span className="hidden md:inline">Logout</span>
       </Button>
     </div>
   );
