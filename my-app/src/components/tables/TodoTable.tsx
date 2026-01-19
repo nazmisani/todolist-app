@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import {
   ColumnDef,
   flexRender,
@@ -17,7 +18,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Pencil, Trash2 } from "lucide-react";
+import { Eye, Pencil, Trash2 } from "lucide-react";
 import { Todo } from "@/types";
 import { format } from "date-fns";
 
@@ -113,6 +114,11 @@ export function TodoTable({
       header: "Actions",
       cell: ({ row }) => (
         <div className="flex gap-2">
+          <Link href={`/todos/${row.original.id}`}>
+            <Button variant="ghost" size="sm">
+              <Eye className="h-4 w-4" />
+            </Button>
+          </Link>
           <Button
             variant="ghost"
             size="sm"
@@ -150,7 +156,7 @@ export function TodoTable({
                     ? null
                     : flexRender(
                         header.column.columnDef.header,
-                        header.getContext()
+                        header.getContext(),
                       )}
                 </TableHead>
               ))}

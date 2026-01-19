@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -11,14 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { Plus } from "lucide-react";
 import { TodoTable } from "@/components/tables/TodoTable";
-import { TodoForm } from "@/components/forms/TodoForm";
-import {
-  useTodos,
-  useCreateTodo,
-  useUpdateTodo,
-  useDeleteTodo,
-  useToggleTodo,
-} from "@/hooks/useTodos";
+import { useTodos, useDeleteTodo, useToggleTodo } from "@/hooks/useTodos";
 import { Todo } from "@/types";
 
 interface TodosClientProps {
@@ -26,43 +20,17 @@ interface TodosClientProps {
 }
 
 export function TodosClient({ initialTodos }: TodosClientProps) {
-  const [isFormOpen, setIsFormOpen] = useState(false);
-  const [editingTodo, setEditingTodo] = useState<Todo | null>(null);
+  const router = useRouter();
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
   const { data: todos } = useTodos();
-  const createTodo = useCreateTodo();
-  const updateTodo = useUpdateTodo();
   const deleteTodo = useDeleteTodo();
   const toggleTodo = useToggleTodo();
 
   const displayTodos = todos || initialTodos;
 
-  const handleCreate = (data: any) => {
-    createTodo.mutate(data, {
-      onSuccess: () => {
-        setIsFormOpen(false);
-      },
-    });
-  };
-
-  const handleUpdate = (data: any) => {
-    if (!editingTodo) return;
-
-    updateTodo.mutate(
-      { id: editingTodo.id, data },
-      {
-        onSuccess: () => {
-          setIsFormOpen(false);
-          setEditingTodo(null);
-        },
-      }
-    );
-  };
-
   const handleEdit = (todo: Todo) => {
-    setEditingTodo(todo);
-    setIsFormOpen(true);
+    router.push(`/todos/${todo.id}/edit`);
   };
 
   const handleDelete = (id: string) => {
@@ -80,11 +48,6 @@ export function TodosClient({ initialTodos }: TodosClientProps) {
     toggleTodo.mutate({ id, completed });
   };
 
-  const handleFormClose = () => {
-    setIsFormOpen(false);
-    setEditingTodo(null);
-  };
-
   return (
     <div className="p-8">
       <div className="mb-6">
@@ -95,7 +58,7 @@ export function TodosClient({ initialTodos }: TodosClientProps) {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-lg">All Tasks</CardTitle>
-          <Button size="sm" onClick={() => setIsFormOpen(true)}>
+          <Button size="sm" onClick={() => router.push("/todos/create")}>
             <Plus className="mr-2 h-4 w-4" />
             New Todo
           </Button>
@@ -109,13 +72,6 @@ export function TodosClient({ initialTodos }: TodosClientProps) {
           />
         </CardContent>
       </Card>
-
-      <TodoForm
-        open={isFormOpen}
-        onOpenChange={handleFormClose}
-        onSubmit={editingTodo ? handleUpdate : handleCreate}
-        initialData={editingTodo}
-      />
 
       <Dialog open={!!deleteId} onOpenChange={() => setDeleteId(null)}>
         <DialogContent>
