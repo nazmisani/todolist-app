@@ -1,10 +1,7 @@
 "use client";
 
-import { useAppSelector, useAppDispatch } from "@/store/hooks";
-import { clearUser } from "@/store/slices/authSlices";
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { LogOut, Menu } from "lucide-react";
+import { useAppSelector } from "@/store/hooks";
+import { Menu, Search, Bell } from "lucide-react";
 
 interface NavbarProps {
   onToggleSidebar: () => void;
@@ -12,42 +9,29 @@ interface NavbarProps {
 
 export default function Navbar({ onToggleSidebar }: NavbarProps) {
   const user = useAppSelector((state) => state.auth.user);
-  const dispatch = useAppDispatch();
-  const router = useRouter();
-
-  const handleLogout = async () => {
-    await fetch("/api/auth/logout", { method: "POST" });
-    dispatch(clearUser());
-    router.push("/login");
-  };
 
   return (
-    <div className="h-14 bg-white border-b px-4 md:px-8 flex items-center justify-between">
-      <div className="flex items-center gap-2 md:gap-4 min-w-0 flex-1">
+    <div className="h-14 bg-white/80 backdrop-blur-md border-b border-gray-200/60 px-6 flex items-center justify-between sticky top-0 z-30">
+      <div className="flex items-center gap-4">
         <button
           onClick={onToggleSidebar}
-          className="p-2 hover:bg-gray-100 rounded-lg transition-colors flex-shrink-0"
+          className="p-2 hover:bg-gray-100 rounded-xl transition-all duration-200 group"
         >
-          <Menu size={20} className="text-gray-600" />
+          <Menu size={20} className="text-gray-600 group-hover:text-gray-900" />
         </button>
-        <div className="min-w-0 flex-1">
-          <h1 className="text-sm md:text-lg font-semibold text-gray-800 truncate">
-            Welcome back{user?.name ? `, ${user.name}` : ""}!
+        <div className="hidden md:flex items-center gap-3">
+          <div className="h-8 w-px bg-gray-200" />
+          <h1 className="text-base font-semibold text-gray-900">
+            Welcome back, {user?.name || "User"}
           </h1>
-          <p className="text-xs text-gray-500 truncate hidden sm:block">
-            {user?.email}
-          </p>
         </div>
       </div>
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={handleLogout}
-        className="flex-shrink-0"
-      >
-        <LogOut size={16} className="md:mr-2" />
-        <span className="hidden md:inline">Logout</span>
-      </Button>
+      <div className="flex items-center gap-2">
+        <button className="p-2 hover:bg-gray-100 rounded-xl transition-all duration-200 relative">
+          <Bell size={18} className="text-gray-600" />
+          <span className="absolute top-1.5 right-1.5 h-2 w-2 bg-red-500 rounded-full" />
+        </button>
+      </div>
     </div>
   );
 }

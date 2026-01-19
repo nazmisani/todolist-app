@@ -15,7 +15,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Edit, Trash2 } from "lucide-react";
+import { Edit, Trash2, FolderOpen, Hash } from "lucide-react";
 
 interface Category {
   id: string;
@@ -42,7 +42,12 @@ export default function CategoryTable({
       accessorKey: "name",
       header: "Name",
       cell: ({ row }) => (
-        <span className="font-medium">{row.original.name}</span>
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-blue-50 rounded-lg">
+            <FolderOpen className="h-4 w-4 text-blue-600" />
+          </div>
+          <span className="font-medium text-gray-800">{row.original.name}</span>
+        </div>
       ),
     },
     {
@@ -50,7 +55,14 @@ export default function CategoryTable({
       header: "Todos",
       cell: ({ row }) => {
         const count = row.original._count?.todos || 0;
-        return <span className="text-sm text-gray-600">{count}</span>;
+        return (
+          <div className="flex items-center gap-2">
+            <Hash className="h-3 w-3 text-gray-400" />
+            <span className="px-2 py-1 bg-gray-100 text-gray-700 rounded-md text-sm font-medium">
+              {count}
+            </span>
+          </div>
+        );
       },
       size: 100,
     },
@@ -60,14 +72,20 @@ export default function CategoryTable({
       cell: ({ row }) => {
         const category = row.original;
         return (
-          <div className="flex gap-2">
-            <Button variant="ghost" size="sm" onClick={() => onEdit(category)}>
+          <div className="flex gap-1">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => onEdit(category)}
+              className="hover:bg-blue-50 hover:text-blue-600"
+            >
               <Edit className="h-4 w-4" />
             </Button>
             <Button
               variant="ghost"
               size="sm"
               onClick={() => onDelete(category.id)}
+              className="hover:bg-red-50 hover:text-red-600"
             >
               <Trash2 className="h-4 w-4 text-red-500" />
             </Button>
@@ -85,7 +103,7 @@ export default function CategoryTable({
   });
 
   return (
-    <div className="border rounded-lg overflow-x-auto">
+    <div className="overflow-x-auto">
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -113,7 +131,10 @@ export default function CategoryTable({
             </TableRow>
           ) : (
             table.getRowModel().rows.map((row) => (
-              <TableRow key={row.id}>
+              <TableRow
+                key={row.id}
+                className="hover:bg-gray-50 transition-colors"
+              >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}

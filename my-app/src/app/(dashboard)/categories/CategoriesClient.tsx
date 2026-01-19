@@ -87,10 +87,12 @@ export function CategoriesClient({ initialCategories }: CategoriesClientProps) {
   };
 
   return (
-    <div className="space-y-4 md:space-y-6">
+    <div className="space-y-6">
       <div className="flex flex-col sm:flex-row gap-3 sm:justify-between sm:items-start">
         <div>
-          <h1 className="text-xl md:text-2xl font-bold">Categories</h1>
+          <h1 className="text-xl md:text-2xl font-bold text-gray-800">
+            Categories
+          </h1>
           <p className="text-sm text-gray-500 mt-1">
             Organize your todos by category
           </p>
@@ -105,11 +107,13 @@ export function CategoriesClient({ initialCategories }: CategoriesClientProps) {
         </Button>
       </div>
 
-      <CategoryTable
-        categories={displayCategories}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-      />
+      <div className="bg-white rounded-lg shadow-sm border">
+        <CategoryTable
+          categories={displayCategories}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+        />
+      </div>
 
       <CategoryForm
         isOpen={isFormOpen}
