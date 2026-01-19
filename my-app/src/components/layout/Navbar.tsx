@@ -1,7 +1,7 @@
 "use client";
 
 import { useAppSelector } from "@/store/hooks";
-import { Menu, Search, Bell } from "lucide-react";
+import { Menu } from "lucide-react";
 
 interface NavbarProps {
   onToggleSidebar: () => void;
@@ -25,12 +25,6 @@ export default function Navbar({ onToggleSidebar }: NavbarProps) {
             Welcome back, {user?.name || "User"}
           </h1>
         </div>
-      </div>
-      <div className="flex items-center gap-2">
-        <button className="p-2 hover:bg-gray-100 rounded-xl transition-all duration-200 relative">
-          <Bell size={18} className="text-gray-600" />
-          <span className="absolute top-1.5 right-1.5 h-2 w-2 bg-red-500 rounded-full" />
-        </button>
       </div>
     </div>
   );

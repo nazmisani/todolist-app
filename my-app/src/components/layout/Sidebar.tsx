@@ -54,13 +54,13 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         />
       )}
       <div
-        className={`fixed md:static inset-y-0 left-0 z-50 bg-white border-r min-h-screen transition-transform duration-300 w-64 flex flex-col ${
+        className={`fixed md:static inset-y-0 left-0 z-50 bg-white border-r h-screen transition-transform duration-300 w-64 relative ${
           isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         } md:block ${isOpen ? "md:w-64" : "md:w-0"}`}
       >
         {isOpen && (
           <>
-            <div className="p-4 w-64 flex-1">
+            <div className="p-4 w-64 pb-32">
               <div className="flex items-center justify-between mb-8 pb-4 border-b">
                 <div>
                   <h2 className="text-xl font-bold text-gray-800">Todo App</h2>
@@ -98,7 +98,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
               </nav>
             </div>
 
-            <div className="mt-auto p-4 w-64 border-t bg-gray-50">
+            <div className="absolute bottom-0 left-0 right-0 p-4 w-64 border-t bg-gray-50">
               <div className="flex items-center gap-3 mb-3">
                 <Avatar className="h-10 w-10">
                   <AvatarFallback className="bg-blue-600 text-white font-medium">
