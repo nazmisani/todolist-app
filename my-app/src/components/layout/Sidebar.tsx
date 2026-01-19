@@ -54,12 +54,12 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         />
       )}
       <div
-        className={`fixed md:static inset-y-0 left-0 z-50 bg-white border-r h-screen transition-transform duration-300 w-64 relative ${
+        className={`fixed md:static inset-y-0 left-0 z-50 bg-white border-r h-screen transition-transform duration-300 w-64 ${
           isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         } md:block ${isOpen ? "md:w-64" : "md:w-0"}`}
       >
         {isOpen && (
-          <>
+          <div className="relative h-full">
             <div className="p-4 w-64 pb-32">
               <div className="flex items-center justify-between mb-8 pb-4 border-b">
                 <div>
@@ -122,7 +122,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                 <span>Logout</span>
               </button>
             </div>
-          </>
+          </div>
         )}
       </div>
     </>
