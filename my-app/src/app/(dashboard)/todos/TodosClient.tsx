@@ -15,6 +15,7 @@ import { TodoTable } from "@/components/tables/TodoTable";
 import { useTodos, useDeleteTodo, useToggleTodo } from "@/hooks/useTodos";
 import { Todo } from "@/types";
 import { useTodoStore } from "@/store/todoStore";
+import { LoadingTable } from "@/components/ui/loading";
 
 interface TodosClientProps {
   initialTodos: Todo[];
@@ -24,7 +25,7 @@ export function TodosClient({ initialTodos }: TodosClientProps) {
   const router = useRouter();
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
-  const { data: todos } = useTodos();
+  const { data: todos, isLoading } = useTodos();
   const deleteTodo = useDeleteTodo();
   const toggleTodo = useToggleTodo();
   const { setSelectedTodo } = useTodoStore();
@@ -73,12 +74,16 @@ export function TodosClient({ initialTodos }: TodosClientProps) {
           </Button>
         </CardHeader>
         <CardContent>
-          <TodoTable
-            todos={displayTodos}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-            onToggle={handleToggle}
-          />
+          {isLoading ? (
+            <LoadingTable />
+          ) : (
+            <TodoTable
+              todos={displayTodos}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+              onToggle={handleToggle}
+            />
+          )}
         </CardContent>
       </Card>
 

@@ -31,6 +31,8 @@ yarn-debug.log*
 yarn-error.log*
 PANDUAN_LENGKAP.md
 SKILL_TEST_CHECKLIST.md
+INTERVIEW_GUIDE_ZUSTAND.md
+ZUSTAND_GUIDE.md
 .pnpm-debug.log*
 
 # env files (can opt-in for committing if needed)

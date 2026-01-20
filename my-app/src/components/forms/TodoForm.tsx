@@ -18,6 +18,7 @@ import {
 import { todoSchema } from "@/validators/todoSchema";
 import { Todo } from "@/types";
 import { useCategories } from "@/hooks/useCategories";
+import { LoadingSpinner } from "@/components/ui/loading";
 
 type TodoFormData = z.infer<typeof todoSchema>;
 
@@ -37,7 +38,8 @@ export function TodoForm({
   isLoading,
   submitLabel = "Save",
 }: TodoFormProps) {
-  const { data: categoriesData } = useCategories();
+  const { data: categoriesData, isLoading: categoriesLoading } =
+    useCategories();
   const categories = categoriesData?.categories || [];
 
   const {
@@ -130,21 +132,27 @@ export function TodoForm({
 
       <div className="space-y-2">
         <Label htmlFor="categoryId">Category</Label>
-        <Select
-          value={categoryValue || undefined}
-          onValueChange={(value) => setValue("categoryId", value)}
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="Select category (optional)" />
-          </SelectTrigger>
-          <SelectContent>
-            {categories.map((category: { id: string; name: string }) => (
-              <SelectItem key={category.id} value={category.id}>
-                {category.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        {categoriesLoading ? (
+          <div className="border rounded-md p-2">
+            <LoadingSpinner />
+          </div>
+        ) : (
+          <Select
+            value={categoryValue || undefined}
+            onValueChange={(value) => setValue("categoryId", value)}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select category (optional)" />
+            </SelectTrigger>
+            <SelectContent>
+              {categories.map((category: { id: string; name: string }) => (
+                <SelectItem key={category.id} value={category.id}>
+                  {category.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        )}
       </div>
 
       <div className="flex justify-end gap-3 pt-4">

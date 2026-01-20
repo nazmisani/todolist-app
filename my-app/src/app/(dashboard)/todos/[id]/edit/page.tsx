@@ -8,6 +8,7 @@ import { todoService } from "@/services/todoService";
 import { useQuery } from "@tanstack/react-query";
 import { useTodoStore } from "@/store/todoStore";
 import { TodoForm } from "@/components/forms/TodoForm";
+import { LoadingSpinner } from "@/components/ui/loading";
 
 interface TodoInput {
   title: string;
@@ -64,7 +65,7 @@ export default function EditTodoPage() {
       <div className="max-w-2xl mx-auto">
         <Card>
           <CardContent className="p-8">
-            <p className="text-center text-gray-500">Loading...</p>
+            <LoadingSpinner />
           </CardContent>
         </Card>
       </div>

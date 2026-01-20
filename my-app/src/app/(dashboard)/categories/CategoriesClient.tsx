@@ -17,6 +17,7 @@ import {
   useDeleteCategory,
 } from "@/hooks/useCategories";
 import { Plus } from "lucide-react";
+import { LoadingTable } from "@/components/ui/loading";
 
 interface Category {
   id: string;
@@ -36,7 +37,7 @@ export function CategoriesClient({ initialCategories }: CategoriesClientProps) {
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
-  const { data } = useCategories();
+  const { data, isLoading } = useCategories();
   const createMutation = useCreateCategory();
   const updateMutation = useUpdateCategory();
   const deleteMutation = useDeleteCategory();
@@ -108,11 +109,17 @@ export function CategoriesClient({ initialCategories }: CategoriesClientProps) {
       </div>
 
       <div className="bg-white rounded-lg shadow-sm border">
-        <CategoryTable
-          categories={displayCategories}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-        />
+        {isLoading ? (
+          <div className="p-4">
+            <LoadingTable />
+          </div>
+        ) : (
+          <CategoryTable
+            categories={displayCategories}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+          />
+        )}
       </div>
 
       <CategoryForm
