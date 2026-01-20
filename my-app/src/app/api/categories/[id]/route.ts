@@ -1,20 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { verifyToken } from "@/utils/jose";
-import { TokenPayload } from "@/types/index";
+import { auth } from "@/lib/auth";
 import { categorySchema } from "@/validators/categorySchema";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const token = request.cookies.get("token")?.value;
-    if (!token) {
+    const session = await auth();
+    if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { userId } = await verifyToken<TokenPayload>(token);
+    const userId = session.user.id;
     const { id } = await params;
 
     const category = await prisma.category.findFirst({
@@ -24,7 +23,7 @@ export async function GET(
     if (!category) {
       return NextResponse.json(
         { error: "Category not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -33,22 +32,22 @@ export async function GET(
     console.error(error);
     return NextResponse.json(
       { error: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const token = request.cookies.get("token")?.value;
-    if (!token) {
+    const session = await auth();
+    if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { userId } = await verifyToken<TokenPayload>(token);
+    const userId = session.user.id;
     const body = await request.json();
     const { id } = await params;
 
@@ -56,7 +55,7 @@ export async function PUT(
     if (!result.success) {
       return NextResponse.json(
         { error: result.error.flatten().fieldErrors },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -70,34 +69,34 @@ export async function PUT(
     if (category.count === 0) {
       return NextResponse.json(
         { error: "Category not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
     return NextResponse.json(
       { message: "Category updated successfully" },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error(error);
     return NextResponse.json(
       { error: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const token = request.cookies.get("token")?.value;
-    if (!token) {
+    const session = await auth();
+    if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { userId } = await verifyToken<TokenPayload>(token);
+    const userId = session.user.id;
     const { id } = await params;
 
     const category = await prisma.category.deleteMany({
@@ -107,19 +106,19 @@ export async function DELETE(
     if (category.count === 0) {
       return NextResponse.json(
         { error: "Category not found" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
     return NextResponse.json(
       { message: "Category deleted successfully" },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error(error);
     return NextResponse.json(
       { error: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

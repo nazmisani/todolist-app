@@ -1,6 +1,6 @@
 "use client";
 
-import { useAppSelector } from "@/store/hooks";
+import { useSession } from "next-auth/react";
 import { Menu } from "lucide-react";
 
 interface NavbarProps {
@@ -8,7 +8,7 @@ interface NavbarProps {
 }
 
 export default function Navbar({ onToggleSidebar }: NavbarProps) {
-  const user = useAppSelector((state) => state.auth.user);
+  const { data: session } = useSession();
 
   return (
     <div className="h-14 bg-white/80 backdrop-blur-md border-b border-gray-200/60 px-6 flex items-center justify-between sticky top-0 z-30">
@@ -22,7 +22,7 @@ export default function Navbar({ onToggleSidebar }: NavbarProps) {
         <div className="hidden md:flex items-center gap-3">
           <div className="h-8 w-px bg-gray-200" />
           <h1 className="text-base font-semibold text-gray-900">
-            Welcome back, {user?.name || "User"}
+            Welcome back, {session?.user?.name || "User"}
           </h1>
         </div>
       </div>

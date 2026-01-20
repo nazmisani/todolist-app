@@ -5,8 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
-import { useAppDispatch } from "@/store/hooks";
-import { setUser } from "@/store/slices/authSlices";
+import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -23,7 +22,6 @@ export default function LoginForm() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const dispatch = useAppDispatch();
 
   const {
     register,
@@ -38,23 +36,21 @@ export default function LoginForm() {
     setLoading(true);
 
     try {
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+      const result = await signIn("credentials", {
+        email: data.email,
+        password: data.password,
+        redirect: false,
       });
 
-      const result = await response.json();
-
-      if (!response.ok) {
-        setError(result.error || "Login failed");
+      if (result?.error) {
+        setError("Invalid email or password");
         setLoading(false);
         return;
       }
 
-      dispatch(setUser(result.user));
       router.push("/dashboard");
-    } catch (err) {
+      router.refresh();
+    } catch {
       setError("Something went wrong");
       setLoading(false);
     }

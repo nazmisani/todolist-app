@@ -1,11 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { Home, CheckSquare, FolderOpen, X, LogOut, User } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useAppSelector, useAppDispatch } from "@/store/hooks";
-import { clearUser } from "@/store/slices/authSlices";
+import { useSession, signOut } from "next-auth/react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 interface SidebarProps {
@@ -15,9 +14,7 @@ interface SidebarProps {
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const pathname = usePathname();
-  const router = useRouter();
-  const dispatch = useAppDispatch();
-  const user = useAppSelector((state) => state.auth.user);
+  const { data: session } = useSession();
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -27,10 +24,8 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  const handleLogout = async () => {
-    await fetch("/api/auth/logout", { method: "POST" });
-    dispatch(clearUser());
-    router.push("/login");
+  const handleLogout = () => {
+    signOut({ callbackUrl: "/login" });
   };
 
   const links = [
@@ -44,6 +39,8 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       onClose();
     }
   };
+
+  const user = session?.user;
 
   return (
     <>

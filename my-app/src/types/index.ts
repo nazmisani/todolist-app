@@ -1,9 +1,3 @@
-export interface TokenPayload {
-  userId: string;
-  email: string;
-  [key: string]: unknown;
-}
-
 export interface User {
   id: string;
   email: string;

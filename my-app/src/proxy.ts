@@ -1,51 +1,30 @@
-import { NextRequest, NextResponse } from "next/server";
-import { verifyToken } from "./utils/jose";
-import { TokenPayload } from "./types/index";
+import { auth } from "@/lib/auth";
+import { NextResponse } from "next/server";
 
-export async function proxy(request: NextRequest) {
-  const token = request.cookies.get("token")?.value;
-  const path = request.nextUrl.pathname;
+export const proxy = auth((req) => {
+  const isLoggedIn = !!req.auth;
+  const { pathname } = req.nextUrl;
 
-  const isAuthPage = path === "/login" || path === "/register";
-  const isProtectedPage =
-    path.startsWith("/dashboard") ||
-    path.startsWith("/todos") ||
-    path.startsWith("/categories");
+  // halaman yang butuh login
+  const protectedRoutes = ["/dashboard", "/todos", "/categories"];
+  const isProtectedRoute = protectedRoutes.some((route) =>
+    pathname.startsWith(route),
+  );
 
-  if (isProtectedPage && !token) {
-    return NextResponse.redirect(new URL("/login", request.url));
+  const authRoutes = ["/login", "/register"];
+  const isAuthRoute = authRoutes.includes(pathname);
+
+  if (isProtectedRoute && !isLoggedIn) {
+    return NextResponse.redirect(new URL("/login", req.url));
   }
 
-  if (isProtectedPage && token) {
-    try {
-      await verifyToken<TokenPayload>(token);
-    } catch (error) {
-      const response = NextResponse.redirect(new URL("/login", request.url));
-      response.cookies.delete("token");
-      return response;
-    }
-  }
-
-  if (isAuthPage && token) {
-    try {
-      await verifyToken<TokenPayload>(token);
-      return NextResponse.redirect(new URL("/dashboard", request.url));
-    } catch (error) {
-      const response = NextResponse.next();
-      response.cookies.delete("token");
-      return response;
-    }
+  if (isAuthRoute && isLoggedIn) {
+    return NextResponse.redirect(new URL("/dashboard", req.url));
   }
 
   return NextResponse.next();
-}
+});
 
 export const config = {
-  matcher: [
-    "/dashboard/:path*",
-    "/todos/:path*",
-    "/categories/:path*",
-    "/login",
-    "/register",
-  ],
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };

@@ -1,19 +1,71 @@
-import { cookies } from "next/headers";
-import { verifyToken } from "@/utils/jose";
-import { TokenPayload } from "@/types";
+import NextAuth from "next-auth";
+import Credentials from "next-auth/providers/credentials";
+import { prisma } from "@/lib/prisma";
+import { comparePassword } from "@/utils/bcrypt";
 
+export const { handlers, signIn, signOut, auth } = NextAuth({
+  providers: [
+    Credentials({
+      name: "credentials",
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        if (!credentials?.email || !credentials?.password) {
+          return null;
+        }
+
+        const email = credentials.email as string;
+        const password = credentials.password as string;
+
+        const user = await prisma.user.findUnique({
+          where: { email },
+        });
+
+        if (!user) {
+          return null;
+        }
+
+        const isValid = await comparePassword(password, user.password);
+
+        if (!isValid) {
+          return null;
+        }
+
+        return {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+        };
+      },
+    }),
+  ],
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.id = token.id as string;
+      }
+      return session;
+    },
+  },
+  pages: {
+    signIn: "/login",
+  },
+  session: {
+    strategy: "jwt",
+  },
+  secret: process.env.AUTH_SECRET,
+});
+
+// helper function untuk ambil userId dari session
 export async function getUserId() {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("token")?.value;
-
-  if (!token) {
-    return null;
-  }
-
-  try {
-    const payload = await verifyToken<TokenPayload>(token);
-    return payload.userId;
-  } catch {
-    return null;
-  }
+  const session = await auth();
+  return session?.user?.id || null;
 }
