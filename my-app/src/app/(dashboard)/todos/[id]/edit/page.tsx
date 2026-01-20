@@ -1,29 +1,21 @@
 "use client";
 
 import { useRouter, useParams } from "next/navigation";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { todoSchema } from "@/validators/todoSchema";
 import { useUpdateTodo } from "@/hooks/useTodos";
-import { useCategories } from "@/hooks/useCategories";
 import { todoService } from "@/services/todoService";
 import { useQuery } from "@tanstack/react-query";
+import { useTodoStore } from "@/store/todoStore";
+import { TodoForm } from "@/components/forms/TodoForm";
 
-type TodoFormData = z.infer<typeof todoSchema>;
+interface TodoInput {
+  title: string;
+  description?: string;
+  priority: "low" | "medium" | "high";
+  dueDate?: string;
+  categoryId?: string;
+}
 
 export default function EditTodoPage() {
   const router = useRouter();
@@ -31,61 +23,43 @@ export default function EditTodoPage() {
   const todoId = params.id as string;
 
   const updateTodo = useUpdateTodo();
-  const { data: categoriesData } = useCategories();
-  const categories = categoriesData?.categories || [];
 
-  const { data: todo, isLoading } = useQuery({
+  // ambil dari zustand store dulu, kalau kosong baru fetch
+  const { selectedTodo, setSelectedTodo, clearSelectedTodo } = useTodoStore();
+
+  const { data: fetchedTodo, isLoading } = useQuery({
     queryKey: ["todo", todoId],
     queryFn: () => todoService.getById(todoId),
+    enabled: !selectedTodo || selectedTodo.id !== todoId,
   });
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    watch,
-    reset,
-    formState: { errors },
-  } = useForm<TodoFormData>({
-    resolver: zodResolver(todoSchema),
-    defaultValues: {
-      title: "",
-      description: "",
-      priority: "medium",
-      dueDate: "",
-      categoryId: "",
-    },
-  });
-
+  // simpan ke store setelah fetch
   useEffect(() => {
-    if (todo) {
-      reset({
-        title: todo.title,
-        description: todo.description || "",
-        priority: todo.priority,
-        dueDate: todo.dueDate
-          ? new Date(todo.dueDate).toISOString().split("T")[0]
-          : "",
-        categoryId: todo.categoryId || "",
-      });
+    if (fetchedTodo && (!selectedTodo || selectedTodo.id !== todoId)) {
+      setSelectedTodo(fetchedTodo);
     }
-  }, [todo, reset]);
+  }, [fetchedTodo, selectedTodo, todoId, setSelectedTodo]);
 
-  const onSubmit = (data: TodoFormData) => {
+  const todo = selectedTodo?.id === todoId ? selectedTodo : fetchedTodo;
+
+  const handleSubmit = (data: TodoInput) => {
     updateTodo.mutate(
       { id: todoId, data },
       {
         onSuccess: () => {
+          clearSelectedTodo();
           router.push("/todos");
         },
       },
     );
   };
 
-  const priorityValue = watch("priority");
-  const categoryValue = watch("categoryId");
+  const handleCancel = () => {
+    clearSelectedTodo();
+    router.push("/todos");
+  };
 
-  if (isLoading) {
+  if (isLoading && !todo) {
     return (
       <div className="max-w-2xl mx-auto">
         <Card>
@@ -109,92 +83,13 @@ export default function EditTodoPage() {
           <CardTitle>Todo Details</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="title">Title *</Label>
-              <Input
-                id="title"
-                {...register("title")}
-                placeholder="Enter todo title"
-              />
-              {errors.title && (
-                <p className="text-sm text-red-500">{errors.title.message}</p>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
-              <Textarea
-                id="description"
-                {...register("description")}
-                placeholder="Enter todo description (optional)"
-                rows={4}
-              />
-              {errors.description && (
-                <p className="text-sm text-red-500">
-                  {errors.description.message}
-                </p>
-              )}
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="priority">Priority</Label>
-                <Select
-                  value={priorityValue}
-                  onValueChange={(value) =>
-                    setValue("priority", value as "low" | "medium" | "high")
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select priority" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="low">Low</SelectItem>
-                    <SelectItem value="medium">Medium</SelectItem>
-                    <SelectItem value="high">High</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="dueDate">Due Date</Label>
-                <Input id="dueDate" type="date" {...register("dueDate")} />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="categoryId">Category</Label>
-              <Select
-                value={categoryValue || undefined}
-                onValueChange={(value) => setValue("categoryId", value)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select category (optional)" />
-                </SelectTrigger>
-                <SelectContent>
-                  {categories.map((category: any) => (
-                    <SelectItem key={category.id} value={category.id}>
-                      {category.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="flex justify-end gap-3 pt-4">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => router.push("/todos")}
-              >
-                Cancel
-              </Button>
-              <Button type="submit" disabled={updateTodo.isPending}>
-                {updateTodo.isPending ? "Updating..." : "Update Todo"}
-              </Button>
-            </div>
-          </form>
+          <TodoForm
+            onSubmit={handleSubmit}
+            onCancel={handleCancel}
+            initialData={todo}
+            isLoading={updateTodo.isPending}
+            submitLabel="Update Todo"
+          />
         </CardContent>
       </Card>
     </div>

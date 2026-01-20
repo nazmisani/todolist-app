@@ -20,7 +20,7 @@ import { Edit, Trash2, FolderOpen, Hash } from "lucide-react";
 interface Category {
   id: string;
   name: string;
-  createdAt: string;
+  createdAt: string | Date;
   _count?: {
     todos: number;
   };

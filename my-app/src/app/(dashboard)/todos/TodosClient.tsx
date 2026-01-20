@@ -14,6 +14,7 @@ import { Plus } from "lucide-react";
 import { TodoTable } from "@/components/tables/TodoTable";
 import { useTodos, useDeleteTodo, useToggleTodo } from "@/hooks/useTodos";
 import { Todo } from "@/types";
+import { useTodoStore } from "@/store/todoStore";
 
 interface TodosClientProps {
   initialTodos: Todo[];
@@ -26,10 +27,13 @@ export function TodosClient({ initialTodos }: TodosClientProps) {
   const { data: todos } = useTodos();
   const deleteTodo = useDeleteTodo();
   const toggleTodo = useToggleTodo();
+  const { setSelectedTodo } = useTodoStore();
 
   const displayTodos = todos || initialTodos;
 
   const handleEdit = (todo: Todo) => {
+    // simpan ke store supaya gak perlu fetch lagi di halaman edit
+    setSelectedTodo(todo);
     router.push(`/todos/${todo.id}/edit`);
   };
 

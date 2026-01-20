@@ -280,7 +280,10 @@ export function TodoTable({
                 {headerGroup.headers.map((header) => (
                   <TableHead
                     key={header.id}
-                    className={(header.column.columnDef.meta as any)?.className}
+                    className={
+                      (header.column.columnDef.meta as { className?: string })
+                        ?.className
+                    }
                   >
                     {header.isPlaceholder
                       ? null
@@ -300,7 +303,10 @@ export function TodoTable({
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
-                      className={(cell.column.columnDef.meta as any)?.className}
+                      className={
+                        (cell.column.columnDef.meta as { className?: string })
+                          ?.className
+                      }
                     >
                       {flexRender(
                         cell.column.columnDef.cell,

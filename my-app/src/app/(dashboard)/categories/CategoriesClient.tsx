@@ -21,7 +21,7 @@ import { Plus } from "lucide-react";
 interface Category {
   id: string;
   name: string;
-  createdAt: Date;
+  createdAt: string | Date;
   _count?: {
     todos: number;
   };
@@ -33,7 +33,7 @@ interface CategoriesClientProps {
 
 export function CategoriesClient({ initialCategories }: CategoriesClientProps) {
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [editingCategory, setEditingCategory] = useState<any>(null);
+  const [editingCategory, setEditingCategory] = useState<Category | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
   const { data } = useCategories();
@@ -51,7 +51,7 @@ export function CategoriesClient({ initialCategories }: CategoriesClientProps) {
     });
   };
 
-  const handleEdit = (category: any) => {
+  const handleEdit = (category: Category) => {
     setEditingCategory(category);
     setIsFormOpen(true);
   };

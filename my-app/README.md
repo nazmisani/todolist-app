@@ -1,52 +1,47 @@
 # Todo List Application
 
-> A full-stack todo management system built with modern web technologies
-
-This is a take-home project demonstrating a complete CRUD application with authentication, state management, and a clean architecture.
+Aplikasi todo list full-stack dengan autentikasi dan fitur CRUD lengkap.
 
 ## 📋 Overview
 
-A production-ready todo list application that allows users to manage their tasks with categories, priorities, and due dates. Built with Next.js 16 (App Router) and PostgreSQL.
+Aplikasi todo list yang memungkinkan user untuk mengelola tugas mereka dengan kategori, prioritas, dan tanggal jatuh tempo. Dibangun dengan Next.js 16 (App Router) dan PostgreSQL.
 
-**Live Demo**: _[Not deployed yet]_
+## ✨ Fitur Utama
 
-## ✨ Key Features
+### Authentication
 
-### Authentication & Authorization
-
-- User registration with password hashing (bcrypt)
-- JWT-based authentication using HTTP-only cookies
-- Protected routes with middleware
-- Session persistence
+- Registrasi user dengan password hashing (bcrypt)
+- Session-based authentication dengan NextAuth.js
+- Protected routes dengan middleware
+- Login dan logout
 
 ### Todo Management
 
-- ✅ Create, read, update, and delete todos
-- ✅ Separate pages for create, view detail, and edit operations
-- ✅ Mark todos as complete/incomplete with one click
-- ✅ Set priority levels (Low, Medium, High) with color indicators
-- ✅ Optional due date tracking
-- ✅ Organize todos by categories
-- ✅ **Pagination** - 10 items per page with page navigation
-- ✅ **Advanced Filtering** - Search by title, filter by priority, status, and category
+- Create, read, update, dan delete todos
+- Halaman terpisah untuk create, view detail, dan edit
+- Toggle status complete/incomplete
+- Priority levels (Low, Medium, High)
+- Due date tracking
+- Kategorisasi todos
+- Pagination (10 items per page)
+- Filtering (search, priority, status, category)
 
 ### Category System
 
-- Create and manage custom categories
+- Create dan manage categories
 - View todo count per category
-- Link todos to categories
 
 ### Dashboard
 
-- Real-time statistics (total, completed, pending todos)
-- Recent activity feed
-- Quick navigation to main features
+- Statistik (total, completed, pending todos)
+- Recent activity
+- Quick navigation
 
 ## 🛠️ Tech Stack
 
 ### Frontend
 
-- **Framework**: Next.js 16.1.1 (App Router with Turbopack)
+- **Framework**: Next.js 16.1.1 (App Router)
 - **UI Library**: React 19
 - **Language**: TypeScript 5
 - **Styling**: Tailwind CSS 4
@@ -55,7 +50,7 @@ A production-ready todo list application that allows users to manage their tasks
 
 ### State Management
 
-- **Client State**: Redux Toolkit 2.11
+- **Client State**: Zustand
 - **Server State**: TanStack Query (React Query) 5.90
 - **Form State**: React Hook Form 7.71
 
@@ -63,13 +58,13 @@ A production-ready todo list application that allows users to manage their tasks
 
 - **API**: Next.js API Routes
 - **Database**: PostgreSQL
-- **ORM**: Prisma 7.2 with Postgres adapter
-- **Authentication**: jose (JWT)
+- **ORM**: Prisma 7.2
+- **Authentication**: NextAuth.js 5
 - **Validation**: Zod 4.3
 
 ### Data Tables
 
-- **TanStack Table 8.21** for advanced table features
+- **TanStack Table 8.21** untuk fitur table
 
 ## 📦 Installation
 
@@ -182,117 +177,125 @@ my-app/
 2. **Prisma with PostgreSQL**: Type-safe database queries and easy schema management
 3. **Redux Toolkit + TanStack Query**: Redux for auth state, React Query for server state (cache invalidation, optimistic updates)
 4. **React Hook Form + Zod**: Performance-optimized forms with runtime validation
-5. **Shadcn UI**: Accessible, customizable components without the bloat of a full UI library
+5. **Shadcn UI**: Accessible, customizable components
 
-### Architecture Patterns
+### Architecture
 
-- **Separation of Concerns**: Services layer abstracts API calls, hooks layer manages server state
-- **Type Safety**: End-to-end TypeScript with Zod validation
-- **Security**: JWT in HTTP-only cookies, protected routes via middleware, password hashing
-- **Code Reusability**: Shared form components, table components, and hooks
+- **Separation of Concerns**: Services untuk API calls, hooks untuk server state
+- **Type Safety**: TypeScript + Zod validation
+- **Security**: Protected routes via middleware, password hashing
+- **Code Reusability**: Shared form components (TodoForm untuk create & edit)
 
 ### State Management Strategy
 
-**Why Redux Toolkit + TanStack Query?**
+**Kenapa Zustand + TanStack Query?**
 
-This project uses a **hybrid state management approach** for optimal performance and maintainability:
+Project ini menggunakan pendekatan hybrid untuk state management:
 
-#### Redux Toolkit (Client/Global State)
+#### Zustand (Client State)
 
-- **Purpose**: Manage authentication state that needs to persist across the entire app
-- **What it stores**: User info (id, email, name), authentication status
-- **Why chosen**:
-  - Simple global state for auth (single source of truth)
-  - Good DevTools for debugging
-  - Familiar pattern for team collaboration
-  - Overkill for this project size, but demonstrates enterprise patterns
+- **Kegunaan**: Menyimpan detail todo yang sedang dilihat/edit
+- **Kenapa dipilih**:
+  - **Simple dan lightweight** - Tidak butuh banyak boilerplate seperti Redux
+  - **Mudah dipahami** - API yang straightforward, cocok untuk project skala kecil-menengah
+  - **Performant** - Re-render hanya komponen yang subscribe ke state tertentu
+  - **No Provider needed** - Bisa langsung import dan pakai
+  - **Persist support** - Mudah untuk persist state jika diperlukan
 
-#### TanStack Query / React Query (Server State)
+Contoh penggunaan di project ini:
 
-- **Purpose**: Manage all server data (todos, categories)
-- **What it handles**: Data fetching, caching, synchronization, mutations
-- **Why chosen**:
-  - **Automatic cache invalidation** - No manual state updates after mutations
-  - **Optimistic updates** - Instant UI feedback
-  - **Background refetching** - Always fresh data
-  - **Loading & error states** - Built-in UX handling
-  - **Less boilerplate** - No need for Redux actions/reducers for CRUD
+```typescript
+// store/todoStore.ts
+const useTodoStore = create((set) => ({
+  selectedTodo: null,
+  setSelectedTodo: (todo) => set({ selectedTodo: todo }),
+  clearSelectedTodo: () => set({ selectedTodo: null }),
+}));
 
-#### When to use which?
+// Dipakai untuk cache todo saat navigasi dari list ke edit page
+// Supaya tidak perlu fetch ulang dari server
+```
 
-| State Type         | Tool            | Example                   |
+#### TanStack Query (Server State)
+
+- **Kegunaan**: Handle semua data dari server (todos, categories)
+- **Fitur yang dipakai**:
+  - Automatic cache invalidation setelah mutasi
+  - Background refetching
+  - Loading dan error states built-in
+
+#### Kapan pakai yang mana?
+
+| Tipe State         | Tool            | Contoh                    |
 | ------------------ | --------------- | ------------------------- |
-| Authentication     | Redux           | User logged in/out status |
-| Server Data (CRUD) | TanStack Query  | Todos list, categories    |
+| Todo Detail Cache  | Zustand         | Selected todo untuk edit  |
+| Server Data (CRUD) | TanStack Query  | List todos, categories    |
 | Form State         | React Hook Form | Input values, validation  |
 | UI State (local)   | useState        | Modal open/close, filters |
 
-**Alternatives Considered:**
+**Alternatif yang dipertimbangkan:**
 
-- **Zustand**: Lighter than Redux, but chose Redux to show enterprise familiarity
-- **Context API**: Too basic, would need manual optimization
-- **Redux for everything**: Too much boilerplate for server state
-- **Only TanStack Query**: Auth state better in Redux for persistence
+- **Redux Toolkit**: Terlalu overkill untuk project ini, butuh banyak boilerplate
+- **Context API**: Perlu manual optimization untuk hindari re-render
+- **Jotai/Recoil**: Bagus tapi Zustand lebih familiar dan straightforward
 
-## 🚀 Available Scripts
+## 🚀 Scripts
 
 ```bash
 npm run dev          # Start development server
 npm run build        # Build for production
 npm start            # Start production server
 npm run lint         # Run ESLint
-npm run seed         # Seed database with sample data
+npm run seed         # Seed database dengan sample data
 ```
 
-## 🔒 Security Considerations
+## 🔒 Security
 
-- Passwords hashed with bcrypt (10 rounds)
-- JWT tokens stored in HTTP-only cookies
-- Token expiration set to 1 hour
-- Middleware protects all dashboard routes
-- User data isolation (each user sees only their own data)
-- Input validation on both client and server
+- Password di-hash dengan bcrypt (10 rounds)
+- Session dengan NextAuth.js
+- Middleware protect semua dashboard routes
+- User data isolation (setiap user hanya lihat data sendiri)
+- Input validation di client dan server
 
-## 🎯 Features Demonstration
+## 🎯 Cara Kerja Aplikasi
 
 ### Authentication Flow
 
-1. Register new account → Password hashed → JWT issued
+1. Register → Password di-hash → User created
 2. Login → Credentials verified → Session created
-3. Protected routes → Middleware validates JWT → Access granted/denied
-4. Logout → Cookie cleared → Redirected to login
+3. Protected routes → Middleware validates session → Access granted/denied
+4. Logout → Session cleared → Redirect ke login
 
 ### Todo Management Flow
 
-1. **Create**: Navigate to `/todos/create` → Fill form → Submit → Redirect to list
-2. **View**: Click todo row or "View" button → Navigate to `/todos/[id]` → See full details
-3. **Edit**: Click "Edit" button → Navigate to `/todos/[id]/edit` → Update form → Submit
-4. **List**: View paginated table (10 per page) with filters and search
-5. **Toggle**: Check/uncheck completion status directly in table
-6. **Delete**: Click delete → Confirmation dialog → Confirm deletion
+1. **Create**: Navigate ke `/todos/create` → Isi form → Submit → Redirect ke list
+2. **View**: Klik View button → Navigate ke `/todos/[id]` → Lihat detail
+3. **Edit**: Klik Edit button → Navigate ke `/todos/[id]/edit` → Update form → Submit
+4. **List**: View paginated table (10 per page) dengan filters dan search
+5. **Toggle**: Check/uncheck completion langsung di table
+6. **Delete**: Klik delete → Confirmation dialog → Confirm
 
-### Advanced Table Features
+### Table Features
 
-- **Pagination**: 10 items per page with Previous/Next navigation
-- **Search**: Filter todos by title (case-insensitive)
-- **Filter by Priority**: Low, Medium, or High
-- **Filter by Status**: Completed or Pending
-- **Filter by Category**: Dynamic list from user's categories
-- **Real-time Updates**: Table automatically refreshes after mutations
+- **Pagination**: 10 items per page dengan Previous/Next navigation
+- **Search**: Filter todos by title
+- **Filter by Priority**: Low, Medium, High
+- **Filter by Status**: Completed atau Pending
+- **Filter by Category**: Dynamic list dari user's categories
 
-### State Management
+### State Management Flow
 
-- **Auth state** (Redux): User info, authentication status
-- **Server state** (React Query): Todos, categories with automatic cache updates
-- **Form state** (React Hook Form): Form inputs, validation errors
+- **Auth state** (NextAuth): User session
+- **Client state** (Zustand): Todo detail cache untuk navigasi
+- **Server state** (TanStack Query): Todos, categories dengan automatic cache
+- **Form state** (React Hook Form): Form inputs, validation
 
 ## 📝 API Endpoints
 
 ### Authentication
 
 - `POST /api/auth/register` - Create new user
-- `POST /api/auth/login` - Authenticate user
-- `POST /api/auth/logout` - Clear session
+- NextAuth handles login/logout via `/api/auth/[...nextauth]`
 
 ### Todos
 
@@ -310,21 +313,29 @@ npm run seed         # Seed database with sample data
 - `PUT /api/categories/[id]` - Update category
 - `DELETE /api/categories/[id]` - Delete category
 
-## 🐛 Known Issues / Future Improvements
+## 📁 Project Structure
 
-- [ ] Add column sorting to table
-- [ ] Email verification for registration
-- [ ] Password reset functionality
-- [ ] Export todos to CSV
-- [ ] Dark mode support
-- [ ] Mobile responsive improvements
-- [ ] Add unit and integration tests
-- [ ] Docker containerization
-
-## 📄 License
-
-This is a project for educational/interview purposes.
+```
+src/
+├── app/
+│   ├── (auth)/           # Public auth pages (login, register)
+│   ├── (dashboard)/      # Protected pages (dashboard, todos, categories)
+│   └── api/              # API Routes
+├── components/
+│   ├── forms/            # Form components (TodoForm reusable)
+│   ├── tables/           # Table components (TanStack Table)
+│   ├── layout/           # Sidebar, Navbar
+│   └── ui/               # Shadcn UI components
+├── hooks/                # Custom React Query hooks
+├── services/             # API client functions
+├── store/                # Zustand store
+├── types/                # TypeScript types
+├── validators/           # Zod schemas
+└── lib/                  # Library configs (Prisma, Auth)
+```
 
 ---
+
+Project ini dibuat sebagai skill test untuk posisi Fullstack Web Developer.
 
 **Note**: This project was built as a take-home assignment to demonstrate full-stack development skills with modern web technologies.

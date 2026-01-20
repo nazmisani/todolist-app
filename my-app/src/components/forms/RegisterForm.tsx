@@ -51,7 +51,7 @@ export default function RegisterForm() {
       }
 
       router.push("/login");
-    } catch (err) {
+    } catch {
       setError("Something went wrong");
       setLoading(false);
     }

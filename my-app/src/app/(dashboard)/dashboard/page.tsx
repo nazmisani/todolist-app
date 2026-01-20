@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckSquare, FolderOpen, ListTodo, CheckCircle } from "lucide-react";
 import DashboardStats from "@/components/dashboard/DashboardStats";
@@ -14,7 +15,7 @@ export default async function DashboardPage() {
       <div>
         <h1 className="text-xl md:text-2xl font-bold">Dashboard</h1>
         <p className="text-sm text-gray-500 mt-1">
-          Welcome back! Here's your overview
+          Welcome back! Here&apos;s your overview
         </p>
       </div>
 
@@ -31,7 +32,7 @@ export default async function DashboardPage() {
             <CardTitle className="text-lg">Quick Actions</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
-            <a
+            <Link
               href="/todos"
               className="block p-3 border rounded hover:bg-gray-50 transition-colors"
             >
@@ -42,8 +43,8 @@ export default async function DashboardPage() {
               <p className="text-sm text-gray-500 mt-1">
                 Create and organize your tasks
               </p>
-            </a>
-            <a
+            </Link>
+            <Link
               href="/categories"
               className="block p-3 border rounded hover:bg-gray-50 transition-colors"
             >
@@ -54,7 +55,7 @@ export default async function DashboardPage() {
               <p className="text-sm text-gray-500 mt-1">
                 Organize your todos by category
               </p>
-            </a>
+            </Link>
           </CardContent>
         </Card>
 
