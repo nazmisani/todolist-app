@@ -32,7 +32,6 @@ export function TodosClient({ initialTodos }: TodosClientProps) {
   const displayTodos = todos || initialTodos;
 
   const handleEdit = (todo: Todo) => {
-    // simpan ke store supaya gak perlu fetch lagi di halaman edit
     setSelectedTodo(todo);
     router.push(`/todos/${todo.id}/edit`);
   };

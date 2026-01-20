@@ -7,6 +7,8 @@ import {
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
+  getFilteredRowModel,
+  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import {
@@ -27,7 +29,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Eye, Pencil, Trash2 } from "lucide-react";
+import { Eye, Pencil, Trash2, ArrowUpDown } from "lucide-react";
 import { Todo } from "@/types";
 import { format } from "date-fns";
 
@@ -38,7 +40,6 @@ interface TodoTableProps {
   onToggle: (id: string, completed: boolean) => void;
 }
 
-// Define columns outside component to prevent re-creation
 const createColumns = (
   onEdit: (todo: Todo) => void,
   onDelete: (id: string) => void,
@@ -47,6 +48,13 @@ const createColumns = (
   {
     id: "completed",
     header: "",
+    accessorFn: (row) => row.completed,
+    filterFn: (row, columnId, filterValue) => {
+      if (filterValue === "all") return true;
+      if (filterValue === "completed") return row.original.completed === true;
+      if (filterValue === "pending") return row.original.completed === false;
+      return true;
+    },
     cell: ({ row }) => (
       <Checkbox
         checked={row.original.completed}
@@ -58,7 +66,20 @@ const createColumns = (
   },
   {
     accessorKey: "title",
-    header: "Title",
+    header: ({ column }: { column: any }) => {
+      return (
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="-ml-3"
+        >
+          Title
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    filterFn: "includesString",
     cell: ({ row }) => (
       <div>
         <div
@@ -75,6 +96,11 @@ const createColumns = (
   {
     accessorKey: "category",
     header: "Category",
+    accessorFn: (row) => row.category?.name,
+    filterFn: (row, columnId, filterValue) => {
+      if (filterValue === "all") return true;
+      return row.original.category?.name === filterValue;
+    },
     cell: ({ row }) => (
       <span className="text-sm">{row.original.category?.name || "-"}</span>
     ),
@@ -82,6 +108,10 @@ const createColumns = (
   {
     accessorKey: "priority",
     header: "Priority",
+    filterFn: (row, columnId, filterValue) => {
+      if (filterValue === "all") return true;
+      return row.original.priority === filterValue;
+    },
     cell: ({ row }) => {
       const priority = row.original.priority;
       const colors = {
@@ -101,7 +131,19 @@ const createColumns = (
   },
   {
     accessorKey: "dueDate",
-    header: "Due Date",
+    header: ({ column }: { column: any }) => {
+      return (
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="-ml-3"
+        >
+          Due Date
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
     cell: ({ row }) => {
       const dueDate = row.original.dueDate;
       if (!dueDate) return <span className="text-sm text-gray-500">-</span>;
@@ -151,59 +193,23 @@ export function TodoTable({
   onToggle,
 }: TodoTableProps) {
   const [mounted, setMounted] = useState(false);
-  const [searchTitle, setSearchTitle] = useState("");
-  const [filterPriority, setFilterPriority] = useState("all");
-  const [filterStatus, setFilterStatus] = useState("all");
-  const [filterCategory, setFilterCategory] = useState("all");
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // Memoize columns to prevent re-creation
   const columns = useMemo(
     () => createColumns(onEdit, onDelete, onToggle),
     [onEdit, onDelete, onToggle],
   );
 
-  // Filter data
-  const filteredData = useMemo(() => {
-    return todos.filter((todo) => {
-      // Search by title
-      if (
-        searchTitle &&
-        !todo.title.toLowerCase().includes(searchTitle.toLowerCase())
-      ) {
-        return false;
-      }
-
-      // Filter by priority
-      if (filterPriority !== "all" && todo.priority !== filterPriority) {
-        return false;
-      }
-
-      // Filter by status
-      if (filterStatus === "completed" && !todo.completed) {
-        return false;
-      }
-      if (filterStatus === "pending" && todo.completed) {
-        return false;
-      }
-
-      // Filter by category
-      if (filterCategory !== "all" && todo.category?.name !== filterCategory) {
-        return false;
-      }
-
-      return true;
-    });
-  }, [todos, searchTitle, filterPriority, filterStatus, filterCategory]);
-
   const table = useReactTable({
-    data: filteredData,
+    data: todos,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
     initialState: {
       pagination: {
         pageSize: 10,
@@ -211,7 +217,6 @@ export function TodoTable({
     },
   });
 
-  // Get unique categories for filter - memoized
   const categories = useMemo(() => {
     return Array.from(
       new Set(todos.map((todo) => todo.category?.name).filter(Boolean)),
@@ -224,14 +229,24 @@ export function TodoTable({
       <div className="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-4">
         <Input
           placeholder="Search by title..."
-          value={searchTitle}
-          onChange={(e) => setSearchTitle(e.target.value)}
+          value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
+          onChange={(e) =>
+            table.getColumn("title")?.setFilterValue(e.target.value)
+          }
           className="w-full sm:max-w-xs"
         />
 
         {mounted && (
           <>
-            <Select value={filterPriority} onValueChange={setFilterPriority}>
+            <Select
+              value={
+                (table.getColumn("priority")?.getFilterValue() as string) ||
+                "all"
+              }
+              onValueChange={(value) =>
+                table.getColumn("priority")?.setFilterValue(value)
+              }
+            >
               <SelectTrigger className="w-full sm:w-37.5">
                 <SelectValue placeholder="Priority" />
               </SelectTrigger>
@@ -243,7 +258,15 @@ export function TodoTable({
               </SelectContent>
             </Select>
 
-            <Select value={filterStatus} onValueChange={setFilterStatus}>
+            <Select
+              value={
+                (table.getColumn("completed")?.getFilterValue() as string) ||
+                "all"
+              }
+              onValueChange={(value) =>
+                table.getColumn("completed")?.setFilterValue(value)
+              }
+            >
               <SelectTrigger className="w-full sm:w-37.5">
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
@@ -254,7 +277,15 @@ export function TodoTable({
               </SelectContent>
             </Select>
 
-            <Select value={filterCategory} onValueChange={setFilterCategory}>
+            <Select
+              value={
+                (table.getColumn("category")?.getFilterValue() as string) ||
+                "all"
+              }
+              onValueChange={(value) =>
+                table.getColumn("category")?.setFilterValue(value)
+              }
+            >
               <SelectTrigger className="w-full sm:w-37.5">
                 <SelectValue placeholder="Category" />
               </SelectTrigger>
@@ -341,9 +372,9 @@ export function TodoTable({
           {Math.min(
             (table.getState().pagination.pageIndex + 1) *
               table.getState().pagination.pageSize,
-            filteredData.length,
+            table.getFilteredRowModel().rows.length,
           )}{" "}
-          of {filteredData.length} results
+          of {table.getFilteredRowModel().rows.length} results
         </div>
         <div className="flex items-center gap-2">
           <Button

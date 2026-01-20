@@ -64,7 +64,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   secret: process.env.AUTH_SECRET,
 });
 
-// helper function untuk ambil userId dari session
 export async function getUserId() {
   const session = await auth();
   return session?.user?.id || null;
