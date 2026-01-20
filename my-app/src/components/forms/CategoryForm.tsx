@@ -60,15 +60,15 @@ export default function CategoryForm({
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <div className="flex items-center gap-3">
-            <div className="p-3 bg-slate-100 rounded-lg">
+          <div className="flex items-start gap-3">
+            <div className="p-2.5 bg-slate-100 rounded-lg">
               <FolderOpen className="h-5 w-5 text-slate-700" />
             </div>
-            <div>
-              <DialogTitle className="text-xl">
+            <div className="flex-1">
+              <DialogTitle className="text-lg font-semibold">
                 {initialData ? "Edit Category" : "Create New Category"}
               </DialogTitle>
-              <DialogDescription className="mt-1">
+              <DialogDescription className="text-sm mt-1">
                 {initialData
                   ? "Update the category name below."
                   : "Add a new category to organize your todos."}
@@ -78,27 +78,26 @@ export default function CategoryForm({
         </DialogHeader>
         <form
           onSubmit={handleSubmit(handleFormSubmit)}
-          className="space-y-6 mt-4"
+          className="space-y-5 mt-6"
         >
           <div className="space-y-2">
             <Label htmlFor="name" className="text-sm font-medium">
-              Category Name
+              Category Name *
             </Label>
             <Input
               id="name"
               {...register("name")}
               disabled={isLoading}
               placeholder="e.g. Work, Personal, Health"
-              className="h-11"
+              className="h-10"
             />
             {errors.name && (
               <p className="text-sm text-red-500 flex items-center gap-1">
-                <X size={14} />
                 {errors.name.message}
               </p>
             )}
           </div>
-          <div className="flex gap-3 justify-end pt-2">
+          <div className="flex gap-2 justify-end pt-2">
             <Button
               type="button"
               variant="outline"

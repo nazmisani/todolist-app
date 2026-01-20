@@ -104,7 +104,7 @@ export function TodoForm({
         )}
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="priority">Priority</Label>
           <Select
@@ -128,31 +128,31 @@ export function TodoForm({
           <Label htmlFor="dueDate">Due Date</Label>
           <Input id="dueDate" type="date" {...register("dueDate")} />
         </div>
-      </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="categoryId">Category</Label>
-        {categoriesLoading ? (
-          <div className="border rounded-md p-2">
-            <LoadingSpinner />
-          </div>
-        ) : (
-          <Select
-            value={categoryValue || undefined}
-            onValueChange={(value) => setValue("categoryId", value)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select category (optional)" />
-            </SelectTrigger>
-            <SelectContent>
-              {categories.map((category: { id: string; name: string }) => (
-                <SelectItem key={category.id} value={category.id}>
-                  {category.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        )}
+        <div className="space-y-2 md:col-span-2">
+          <Label htmlFor="categoryId">Category</Label>
+          {categoriesLoading ? (
+            <div className="border rounded-md p-2">
+              <LoadingSpinner />
+            </div>
+          ) : (
+            <Select
+              value={categoryValue || undefined}
+              onValueChange={(value) => setValue("categoryId", value)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select category (optional)" />
+              </SelectTrigger>
+              <SelectContent>
+                {categories.map((category: { id: string; name: string }) => (
+                  <SelectItem key={category.id} value={category.id}>
+                    {category.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+        </div>
       </div>
 
       <div className="flex justify-end gap-3 pt-4">

@@ -103,13 +103,13 @@ export default function CategoryTable({
   });
 
   return (
-    <div className="overflow-x-auto">
+    <div className="rounded-md border">
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
-                <TableHead key={header.id}>
+                <TableHead key={header.id} className="font-semibold">
                   {flexRender(
                     header.column.columnDef.header,
                     header.getContext(),
@@ -122,11 +122,14 @@ export default function CategoryTable({
         <TableBody>
           {table.getRowModel().rows.length === 0 ? (
             <TableRow>
-              <TableCell
-                colSpan={columns.length}
-                className="h-24 text-center text-gray-500"
-              >
-                No categories found
+              <TableCell colSpan={columns.length} className="h-32 text-center">
+                <div className="flex flex-col items-center gap-2">
+                  <FolderOpen className="h-8 w-8 text-gray-300" />
+                  <p className="text-sm text-gray-500">No categories found</p>
+                  <p className="text-xs text-gray-400">
+                    Create your first category to get started
+                  </p>
+                </div>
               </TableCell>
             </TableRow>
           ) : (

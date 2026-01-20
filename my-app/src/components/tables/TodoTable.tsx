@@ -160,7 +160,7 @@ const createColumns = (
   },
   {
     id: "actions",
-    header: "",
+    header: "Actions",
     cell: ({ row }) => (
       <div className="flex gap-1">
         <Link
