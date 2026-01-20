@@ -21,7 +21,7 @@ export default function DashboardStats({
       title: "Total Todos",
       value: totalTodos.toString(),
       icon: ListTodo,
-      color: "text-blue-600",
+      color: "text-slate-600",
     },
     {
       title: "Completed",

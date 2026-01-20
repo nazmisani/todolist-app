@@ -43,8 +43,8 @@ export default function CategoryTable({
       header: "Name",
       cell: ({ row }) => (
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-blue-50 rounded-lg">
-            <FolderOpen className="h-4 w-4 text-blue-600" />
+          <div className="p-2 bg-slate-100 rounded-lg">
+            <FolderOpen className="h-4 w-4 text-slate-700" />
           </div>
           <span className="font-medium text-gray-800">{row.original.name}</span>
         </div>
@@ -77,7 +77,7 @@ export default function CategoryTable({
               variant="ghost"
               size="sm"
               onClick={() => onEdit(category)}
-              className="hover:bg-blue-50 hover:text-blue-600"
+              className="hover:bg-slate-50 hover:text-slate-700"
             >
               <Edit className="h-4 w-4" />
             </Button>

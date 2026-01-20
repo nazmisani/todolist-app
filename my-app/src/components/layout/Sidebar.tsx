@@ -83,7 +83,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                       onClick={handleLinkClick}
                       className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors ${
                         isActive
-                          ? "bg-blue-50 text-blue-600 font-medium"
+                          ? "bg-slate-100 text-slate-800 font-medium"
                           : "text-gray-600 hover:bg-gray-50"
                       }`}
                     >
@@ -98,7 +98,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
             <div className="absolute bottom-0 left-0 right-0 p-4 w-64 border-t bg-gray-50">
               <div className="flex items-center gap-3 mb-3">
                 <Avatar className="h-10 w-10">
-                  <AvatarFallback className="bg-blue-600 text-white font-medium">
+                  <AvatarFallback className="bg-slate-700 text-white font-medium">
                     {user?.name?.charAt(0).toUpperCase() || <User size={18} />}
                   </AvatarFallback>
                 </Avatar>

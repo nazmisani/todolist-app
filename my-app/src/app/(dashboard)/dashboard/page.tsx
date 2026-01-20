@@ -37,7 +37,7 @@ export default async function DashboardPage() {
               className="block p-3 border rounded hover:bg-gray-50 transition-colors"
             >
               <div className="flex items-center gap-2">
-                <ListTodo size={18} className="text-blue-600" />
+                <ListTodo size={18} className="text-slate-600" />
                 <span className="font-medium">Manage Todos</span>
               </div>
               <p className="text-sm text-gray-500 mt-1">

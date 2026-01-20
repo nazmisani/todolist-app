@@ -61,8 +61,8 @@ export default function CategoryForm({
       <DialogContent className="max-w-md">
         <DialogHeader>
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-blue-50 rounded-lg">
-              <FolderOpen className="h-5 w-5 text-blue-600" />
+            <div className="p-3 bg-slate-100 rounded-lg">
+              <FolderOpen className="h-5 w-5 text-slate-700" />
             </div>
             <div>
               <DialogTitle className="text-xl">
@@ -111,7 +111,7 @@ export default function CategoryForm({
             <Button
               type="submit"
               disabled={isLoading}
-              className="min-w-24 bg-blue-600 hover:bg-blue-700"
+              className="min-w-24 bg-slate-700 hover:bg-slate-800"
             >
               {isLoading ? "Saving..." : initialData ? "Update" : "Create"}
             </Button>

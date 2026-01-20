@@ -14,7 +14,7 @@ export default function LoginPage() {
           Don&apos;t have an account?{" "}
           <Link
             href="/register"
-            className="text-blue-600 hover:underline font-medium"
+            className="text-slate-600 hover:underline font-medium"
           >
             Create one
           </Link>
