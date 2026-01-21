@@ -23,7 +23,7 @@ services:
       - "3000:3000"
     environment:
       DATABASE_URL: postgresql://postgres:postgres123@db:5432/todoapp
-      AUTH_SECRET: supersecretkey1234567890abcdefghij
+      AUTH_SECRET: ahsdljashdkjasldaljdjsa
       NEXTAUTH_URL: http://localhost:3000
     depends_on:
       db:

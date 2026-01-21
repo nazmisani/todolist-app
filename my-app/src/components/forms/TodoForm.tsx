@@ -62,7 +62,7 @@ export function TodoForm({
 
   useEffect(() => {
     if (initialData) {
-      reset({
+      const formData = {
         title: initialData.title,
         description: initialData.description || "",
         priority: initialData.priority,
@@ -70,9 +70,16 @@ export function TodoForm({
           ? new Date(initialData.dueDate).toISOString().split("T")[0]
           : "",
         categoryId: initialData.categoryId || "",
-      });
+      };
+      reset(formData);
+
+      // Set priority dan category manual buat mastiin ter-update
+      setValue("priority", initialData.priority);
+      if (initialData.categoryId) {
+        setValue("categoryId", initialData.categoryId);
+      }
     }
-  }, [initialData, reset]);
+  }, [initialData, reset, setValue]);
 
   const priorityValue = watch("priority");
   const categoryValue = watch("categoryId");
@@ -108,7 +115,7 @@ export function TodoForm({
         <div className="space-y-2">
           <Label htmlFor="priority">Priority</Label>
           <Select
-            value={priorityValue}
+            value={priorityValue || "medium"}
             onValueChange={(value) =>
               setValue("priority", value as "low" | "medium" | "high")
             }
@@ -137,7 +144,7 @@ export function TodoForm({
             </div>
           ) : (
             <Select
-              value={categoryValue || undefined}
+              value={categoryValue || ""}
               onValueChange={(value) => setValue("categoryId", value)}
             >
               <SelectTrigger>

@@ -75,7 +75,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
               <nav className="space-y-1">
                 {links.map((link) => {
                   const Icon = link.icon;
-                  const isActive = pathname === link.href;
+                  const isActive = pathname.startsWith(link.href);
                   return (
                     <Link
                       key={link.href}

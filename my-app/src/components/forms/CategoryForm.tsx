@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -43,8 +44,19 @@ export default function CategoryForm({
     reset,
   } = useForm<CategoryFormData>({
     resolver: zodResolver(categorySchema),
-    defaultValues: initialData,
+    defaultValues: {
+      name: "",
+    },
   });
+
+  // Update form ketika initialData berubah (untuk edit)
+  useEffect(() => {
+    if (initialData) {
+      reset(initialData);
+    } else {
+      reset({ name: "" });
+    }
+  }, [initialData, reset, isOpen]);
 
   const handleFormSubmit = (data: CategoryFormData) => {
     onSubmit(data);
