@@ -4,6 +4,7 @@ import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import {
   ColumnDef,
+  Column,
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
@@ -66,7 +67,7 @@ const createColumns = (
   },
   {
     accessorKey: "title",
-    header: ({ column }: { column: any }) => {
+    header: ({ column }: { column: Column<Todo> }) => {
       return (
         <Button
           variant="ghost"
@@ -131,7 +132,7 @@ const createColumns = (
   },
   {
     accessorKey: "dueDate",
-    header: ({ column }: { column: any }) => {
+    header: ({ column }: { column: Column<Todo> }) => {
       return (
         <Button
           variant="ghost"
@@ -160,9 +161,9 @@ const createColumns = (
   },
   {
     id: "actions",
-    header: "Actions",
+    header: () => <div className="text-center">Actions</div>,
     cell: ({ row }) => (
-      <div className="flex gap-1">
+      <div className="flex gap-1 justify-center">
         <Link
           href={`/todos/${row.original.id}`}
           className="hidden xl:inline-block"
@@ -226,14 +227,14 @@ export function TodoTable({
   return (
     <div className="space-y-4">
       {/* Filters */}
-      <div className="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
         <Input
           placeholder="Search by title..."
           value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
           onChange={(e) =>
             table.getColumn("title")?.setFilterValue(e.target.value)
           }
-          className="w-full sm:max-w-xs"
+          className="col-span-2 md:col-span-1"
         />
 
         {mounted && (
@@ -247,7 +248,7 @@ export function TodoTable({
                 table.getColumn("priority")?.setFilterValue(value)
               }
             >
-              <SelectTrigger className="w-full sm:w-37.5">
+              <SelectTrigger>
                 <SelectValue placeholder="Priority" />
               </SelectTrigger>
               <SelectContent>
@@ -267,7 +268,7 @@ export function TodoTable({
                 table.getColumn("completed")?.setFilterValue(value)
               }
             >
-              <SelectTrigger className="w-full sm:w-37.5">
+              <SelectTrigger>
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
               <SelectContent>
@@ -286,7 +287,7 @@ export function TodoTable({
                 table.getColumn("category")?.setFilterValue(value)
               }
             >
-              <SelectTrigger className="w-full sm:w-37.5">
+              <SelectTrigger>
                 <SelectValue placeholder="Category" />
               </SelectTrigger>
               <SelectContent>

@@ -124,6 +124,27 @@ npm run dev
 
 Buka [http://localhost:3000](http://localhost:3000) di browser.
 
+### Docker Setup (Opsional)
+
+Untuk menjalankan aplikasi menggunakan Docker:
+
+```bash
+# Jalankan semua services (app + database)
+docker compose up -d
+
+# Jalankan migration dan seed (pertama kali)
+docker compose exec app npx prisma migrate deploy
+docker compose exec app npm run seed
+
+# Lihat logs
+docker compose logs -f
+
+# Stop semua services
+docker compose down
+```
+
+Aplikasi akan berjalan di [http://localhost:3000](http://localhost:3000)
+
 ## 🧪 Test Credentials
 
 Setelah menjalankan seed script, login dengan salah satu akun berikut:
@@ -174,7 +195,7 @@ my-app/
 │   ├── utils/                 # Utility functions (bcrypt)
 │   ├── lib/                   # Library configurations (Prisma, Auth)
 │   ├── providers/             # React providers (Auth, Query)
-│   └── middleware.ts          # Route protection middleware
+│   └── proxy.ts               # Route protection (Next.js 16 Proxy)
 ├── .env                       # Environment variables
 ├── package.json
 └── README.md
@@ -263,7 +284,7 @@ export const useTodoStore = create<TodoStore>((set) => ({
 
 - **Password Hashing**: bcrypt dengan 10 salt rounds
 - **Session Management**: NextAuth.js v5 dengan JWT
-- **Route Protection**: Middleware melindungi semua dashboard routes
+- **Route Protection**: Proxy (Next.js 16) melindungi semua dashboard routes
 - **API Protection**: Auth check di setiap API endpoint
 - **Data Isolation**: User hanya bisa akses data miliknya sendiri
 - **Input Validation**: Zod schema di client dan server
@@ -277,7 +298,7 @@ Register → Password di-hash (bcrypt) → User created
     ↓
 Login → Credentials verified → Session created (JWT)
     ↓
-Protected routes → Middleware validates session → Access granted/denied
+Protected routes → Proxy validates session → Access granted/denied
     ↓
 Logout → Session cleared → Redirect ke login
 ```
@@ -384,7 +405,7 @@ model Todo {
 3. **Zustand + TanStack Query**: Zustand untuk simple client state, TanStack Query untuk server state dengan caching
 4. **React Hook Form + Zod**: Performance-optimized forms dengan runtime type validation
 5. **Shadcn UI**: Accessible, customizable, copy-paste components (not a dependency)
-6. **Middleware Protection**: Route-level auth check sebelum render
+6. **Proxy Protection**: Route-level auth check sebelum render (Next.js 16 menggunakan Proxy menggantikan Middleware)
 
 ---
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { toast } from "react-toastify";
 import { Button } from "@/components/ui/button";
 import CategoryTable from "@/components/tables/CategoryTable";
 import CategoryForm from "@/components/forms/CategoryForm";
@@ -47,7 +48,11 @@ export function CategoriesClient({ initialCategories }: CategoriesClientProps) {
   const handleCreate = (formData: { name: string }) => {
     createMutation.mutate(formData, {
       onSuccess: () => {
+        toast.success("Category created successfully");
         setIsFormOpen(false);
+      },
+      onError: () => {
+        toast.error("Failed to create category");
       },
     });
   };
@@ -63,8 +68,12 @@ export function CategoriesClient({ initialCategories }: CategoriesClientProps) {
         { id: editingCategory.id, data: formData },
         {
           onSuccess: () => {
+            toast.success("Category updated successfully");
             setIsFormOpen(false);
             setEditingCategory(null);
+          },
+          onError: () => {
+            toast.error("Failed to update category");
           },
         },
       );
@@ -77,7 +86,14 @@ export function CategoriesClient({ initialCategories }: CategoriesClientProps) {
 
   const confirmDelete = () => {
     if (deleteId) {
-      deleteMutation.mutate(deleteId);
+      deleteMutation.mutate(deleteId, {
+        onSuccess: () => {
+          toast.success("Category deleted successfully");
+        },
+        onError: () => {
+          toast.error("Failed to delete category");
+        },
+      });
       setDeleteId(null);
     }
   };

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -43,13 +44,32 @@ export function TodosClient({ initialTodos }: TodosClientProps) {
 
   const confirmDelete = () => {
     if (deleteId) {
-      deleteTodo.mutate(deleteId);
+      deleteTodo.mutate(deleteId, {
+        onSuccess: () => {
+          toast.success("Todo deleted successfully");
+        },
+        onError: () => {
+          toast.error("Failed to delete todo");
+        },
+      });
       setDeleteId(null);
     }
   };
 
   const handleToggle = (id: string, completed: boolean) => {
-    toggleTodo.mutate({ id, completed });
+    toggleTodo.mutate(
+      { id, completed },
+      {
+        onSuccess: () => {
+          toast.success(
+            completed ? "Todo marked as done" : "Todo marked as pending",
+          );
+        },
+        onError: () => {
+          toast.error("Failed to update todo");
+        },
+      },
+    );
   };
 
   return (

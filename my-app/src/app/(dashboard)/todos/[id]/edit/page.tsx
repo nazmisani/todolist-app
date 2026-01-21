@@ -2,6 +2,7 @@
 
 import { useRouter, useParams } from "next/navigation";
 import { useEffect } from "react";
+import { toast } from "react-toastify";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useUpdateTodo } from "@/hooks/useTodos";
 import { todoService } from "@/services/todoService";
@@ -48,8 +49,12 @@ export default function EditTodoPage() {
       { id: todoId, data },
       {
         onSuccess: () => {
+          toast.success("Todo updated successfully");
           clearSelectedTodo();
           router.push("/todos");
+        },
+        onError: () => {
+          toast.error("Failed to update todo");
         },
       },
     );

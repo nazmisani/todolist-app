@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useCreateTodo } from "@/hooks/useTodos";
 import { TodoForm } from "@/components/forms/TodoForm";
@@ -20,7 +21,11 @@ export default function CreateTodoPage() {
   const handleSubmit = (data: TodoInput) => {
     createTodo.mutate(data, {
       onSuccess: () => {
+        toast.success("Todo created successfully");
         router.push("/todos");
+      },
+      onError: () => {
+        toast.error("Failed to create todo");
       },
     });
   };
